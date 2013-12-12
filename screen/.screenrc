@@ -1,0 +1,60 @@
+# dikmeno created this file from scratch on August 31, 2008.
+# It did not exist by default.
+#
+# Ctrl+a A   - Change title of individual virtual screens
+# Ctrl+a :   - Now you can for instance re-load screenrc. cd to ~$HOME, and type "source .screenrc"
+# Ctrl+a ?   - Get help
+# man screen: Comprehensive help menu, but it is initially hard to read. Read it while experimenting with this file.
+# google 'screen hardstatus string' or 'screenrc' or 'gnu screenrc' to get info online.
+
+# Turn off welcome screen every time screen is started.
+startup_message off
+
+# Change the hotkey Ctrl+A to Ctrl+W so that the shortcut Ctrl+A continues
+# working. The shortcut Ctrl+A quickly moves the cursor to the beginning
+# of the line.
+# Remember that Ctrl+A a  also acts as moving the cursor to the beginning
+# of the line if the following escape line is commented out.
+#escape ^Ww
+
+vbell on
+shell -bash
+
+# Hardstatus line is used for status messages from screen - for example to alert you to activity or other similar messages.
+# Caption line is usually only shown if there is more than one window open, and allows you to view details of them.
+
+# Status at the bottom
+hardstatus alwayslastline
+#hardstatus string '%{= kG}[ %{G}%H %{g}][%{w}%= %{=kw}%?%-Lw%?%{r}(%{Y}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %D %{W}%C:%s%a %{g}]'
+hardstatus string '%{= kG}[ %{G}%H %{g}][%{w}%= %{=kw}%?%-Lw%?%{r}(%{Y}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %D %{W}%C%a %{g}]'
+
+# Caption at the bottom (Machine load average, etc.)
+#caption always '%{Gb}%3n %t %=[%l | %H | %c]'
+
+
+# Open up default virtual screens at startup of screen
+#screen -t montana  0 ssh montana-linux
+#screen -t top      1 nice top
+#screen -t sinfo    2 nice sinfo
+#screen -t client   3
+
+# TODO: Test this (2008.09.05)
+# When you check on your download, it's not finished (screen doesn't take that long to download, but we'll
+# pretend it does for this demonstration). Time to get back to your messy home directory, right? Before doing
+# that, press Ctrl-A Shift-M to monitor the current window for output. Now screen will notify you when there
+# is activity in the FTP window. Bouncing between windows to check on your download's progress is no longer
+# necessary. This also works in the inverse case; use Ctrl-A _ to monitor for silence (30 seconds by default).
+# Monitoring for silence is useful for long compile jobs or other things that spew information.
+
+
+# Want to go back 3000 lines backwards when scrolling. Default is 100.
+defscrollback 3000
+
+
+# Give me back my scrollback in xterm - Scroll using mouse now works!
+# Either of the following works, however, due to hardstatus set to display seconds of the current time,
+# the display will show the last page every second. So, take out seconds display if you want to
+# be able to use mouse scrolling.
+termcapinfo xterm|xterms|xs ti=\E7\E[?47
+#termcapinfo xterm ti@:te@
+

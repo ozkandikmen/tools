@@ -1,0 +1,26 @@
+! Copied this from Jerias on December 11, 2013 and modified it (fonts, term size) slightly.
+! IMPORTANT: Following line must be in .bashrc in order for this file to be used when 'xterm' is started:
+!                   xrdb $HOME/.Xresources
+! Also, changes to this file will take affect only after running the xrdb command above, or
+! just source .bashrc again.
+xterm*background:       grey10
+xterm*foreground:       white
+xterm*cursorColor:      grey90
+!xterm*faceName:         Terminus:normal:12
+!xterm*faceName:         Anonymous Pro for Powerline:normal:12
+xterm*faceName:         Liberation Mono:size=10
+xterm*utf8:             2
+xterm*dynamicColors:    true
+xterm*vt100.geometry:   230x60
+xterm*saveLines:        2000
+xterm*scrollKey:        true
+xterm*scrollBar:        true
+xterm*rightScrollBar:   true
+xterm*scrollTtyOutput:  false
+xterm*jumpScroll:       true
+xterm*multiScroll:      true
+xterm*toolBar:          true
+xterm*charClass:        33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+!xterm*loginShell:       true
+!xterm*termName:         xterm-color
+xterm*termName:         xterm-256color

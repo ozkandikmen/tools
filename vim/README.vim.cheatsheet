@@ -1,0 +1,44 @@
+Ctrl+v puts into visual column editing mode
+
+====================================================================================================
+In order to view files in a nice fixed size font, take these steps:
+a) Install ProggyCleanTT (there are many other fonts, but this one looks
+   pretty nice) to your system:  http://www.proggyfonts.com/ ->
+   Download ProggyCleanTT (ttf). Unzip it into ~/.fonts/*, then run "fc-cache".
+b) 'set guifont=ProggyCleanTTSZBP\ 12' in .gvimrc will make gvim use that font.
+   This line does not affect vim as vim uses fonts that the xterm can display.
+Note that this font can display charsets defined in ISO-8859-1, i.e. English characters.
+Some Turkish characters can't be displayed properly - Turkish characters can
+be completely displayed if a font can handle ISO-8859-9 charset.
+
+In order to view/edit a file with Turkish characters in it, do this:
+a) On xterm, 'export LANG=tr_TR.UTF-8'
+b) Run 'gedit' to edit the file.
+c) Once done, set LANG back to 'en_US.UTF-8' (default language type) on that xterm.
+Note that
+a) gedit saves file using character encodings in UTF-8 (can be displayed
+   properly by web browsers)
+b) You must have turned on Turkish language support on that linux system before
+   the steps above can succeed. To turn on the support on Ubuntu GNOME Desktop,
+   use System->Administration->Language Support. Add Turkish.  You do not need
+   to designate it as default. It is because of this that export LANG=.. is
+   required before starting gedit.
+
+- The linux command 'locale' displays current locale settings on that xterm.
+  You can see what LANG is the current setting as well as many other settings.
+- The (g)vim command :language display the current language setting that (g)vim
+  uses. It can also be used to change the language. However, without a proper
+  font installed on the linux system, (g)vim will not display files with
+  Turkish characters in them correctly (unlike gedit). If there is a proper
+  font installed on the system, setting the locale (i.e. LANG on the xterm)
+  will automatically set encoding properly as well and after that (g)vim should
+  automatically display all Turkish characters properly. As of 2008.11.15, I
+  could not find a font that could display Turkish characters, therefore I
+  cannot confirm this theory.
+
+====================================================================================================
+Tabs in (g)vim can be opened by typing :tabnew
+Once a tab is open, file can be opened by typing :e <file>
+gt is a shortcut for cycling through open tabs.
+As of December 2013, gbuf (a perl script) is an excellent alternative to using tabs in gvim.
+

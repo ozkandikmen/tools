@@ -1,0 +1,22 @@
+Following directories and their content have been created via perl_vim.zip downloaded
+from http://www.vim.org/scripts/script.php?script_id=2526. It's version 0.14, released
+on 2011.03.22:
+
+    ~/.vim/
+           |-- ftplugin            Dir
+           |   |-- perl.vim
+           |   |-- perl6.vim
+           |   `-- xs.vim
+           |-- indent              Dir
+           |   |-- perl.vim
+           |   `-- perl6.vim
+           `-- syntax              Dir
+               |-- perl.vim
+               |-- perl6.vim
+               |-- pod.vim
+               |-- tt2.vim
+               |-- tt2html.vim
+               `-- xs.vim
+
+These directories did not exist prior to unzipping of perl_vim.zip.
+It does perl & perl6, including MooseX::Declare syntax highlighting.
