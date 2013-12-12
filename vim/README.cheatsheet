@@ -1,4 +1,27 @@
-Ctrl+v puts into visual column editing mode
+TODO:
+----
+Is it possible to create a horizontal scroll bar in vim as well as gvim?
+
+
+====================================================================================================
+Ctrl+v activates visual column editing mode
+
+:set nonu   " Disable line numbering so I can select text with l-mouse without line numbers :)
+
+"pyy        " Copy current line into buffer 'p'  (p is arbitrary)
+"pp         " Paste what is in the buffer 'p'    (The buffer p is the second p)
+
+30|         " Jump to column 30 on the current line. Works only if there is at least 30 characters on the line
+
+gqap        " Indent the paragraph where the cursor is at. Blank lines are the borders of the paragraph.
+            " By default, 80 column is used.  To change it, :set textwidth=90
+
+.\{-}       " Non-greedy search, equivalent to '.*' in standard regexp.
+
+qa          " Start record macro 'a'. When done, hit q again to stop recording.
+@a          " Execute macro 'a' once.
+10@a        " Execute macro 'a' 10 times.
+
 
 ====================================================================================================
 In order to view files in a nice fixed size font, take these steps:
