@@ -24,3 +24,7 @@ xterm*charClass:        33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
 !xterm*loginShell:       true
 !xterm*termName:         xterm-color
 xterm*termName:         xterm-256color
+
+! Following line makes it possible to paste any l-mouse selected text from an xterm into an app on your virtual win (with regular ctrl+v)
+! You do not need this setting in order to go the other way, e.g. copy (ctrl+c) text from a virtual win app, then click m-mouse on an xterm to paste it into.
+xterm*selectToClipboard:true
