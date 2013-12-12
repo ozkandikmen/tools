@@ -1,0 +1,55 @@
+# Changes in file1 between SHA=15dc8 and its parent.
+# TODO: Is parent the immediate parent of 15dc8 or is it a parent where file1 was modified the last time before 15dc8?
+git diff 15dc8^! -- file1     <=>     git diff 15dc8^..15dc8 -- file1
+
+# Changes in file1 between the listed 2 things
+git diff 15dc8    -- file1      # Filesystem vs SHA=15dc8
+git diff          -- file1      # Filesystem vs Stage (index)
+git diff HEAD     -- file1      # Filesystem vs HEAD  (last committed that your wcp sees w/o any local mod to file1)
+git diff --cached -- file1      # Stage      vs HEAD  (last committed that your wcp sees w/o any local mod to file1)
+
+# Changes in file1 between what is in HEAD (last committed that your wcp sees) and a specific commit (SHA=15dc8)
+git diff 15dc8..HEAD -- file1
+
+# Ways to access commits, used with any git command that takes SHA as an argument (log, diff, show, etc.)
+HEAD
+HEAD^    <=> HEAD^1             # Parent commit object of HEAD
+HEAD^2                          # Grandparent commit object of HEAD
+HEAD~1                          # TODO: ??
+HEAD^!   <=> HEAD^..HEAD
+HEAD^...HEAD                    # Some git commands work in one chronological path. Triple period allows any order here.
+Any valid SHA value can be used in place of 'HEAD' in the lines above.
+
+
+# --first-parent ... TODO: Write about it
+
+
+# log
+git log --author="Ozkan Dikmen" # Commits by Ozkan Dikmen
+git log --stat                  # Display path/file names involved in each commit object log displays info about
+git log -3                      # Display most recent 3 commit object, starting with what your wcp is "seeing"
+
+# show
+git show --stat 15cd8           # Display path/file names involved in the commit object SHA=15dc8
+
+# Cherry-pick: When cherry-pick is executed by person 1, author of the original commit object (person 2) is
+# transferred over to the new commit object, and person 1 appears as committer of the new commit object.
+git cherry-pick -n 15dc8        # -n: Do not auto commit after (if) cherry-pick succeeds
+
+# revert
+git revert -n 15dc8             # -n: Do not auto commit after (if) revert succeeds
+
+# reset
+....                            # TODO: Provide common uses of this command
+
+# checkout
+git checkout -- # TODO: Provide branch changing example
+
+# branch
+git branch -D branchname        # Delete local branch 'branchname'
+....                            # TODO: Provide remote branch delete command here
+
+# rebase
+....                            # TODO: Provide common uses of this command from git-tool.  Describe interactive rebase, too.
+
+# tag
