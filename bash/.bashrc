@@ -89,6 +89,9 @@ alias mv='mv -i'
 #alias less='less -R -S'
 export LESS="-X -R -S"
 
+# Make grep highlight the matches in its output
+alias grep="grep --color"
+
 # My files in $HOME/bin are better than those introduced by /tools/oss/latest.env_var.sh :)
 export PATH=$HOME/bin:$PATH
 
