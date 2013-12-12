@@ -310,6 +310,32 @@ mkdir -p $SCREENDIR
 chmod 700 $SCREENDIR
 
 #--------------------------------------------------------------------------------
+# Echo an easy to copy line for setting the current display (mainly for updating existing screens)
+mkdir -p ~/.curDisplay
+alias sourcecurdisplay='source ~/.curDisplay/${HOSTNAME}'
+alias updatecurdisplay='echo "export DISPLAY=$DISPLAY" > ~/.curDisplay/${HOSTNAME}'
+
+fromssh=`echo $DISPLAY | grep localhost`
+#echo "fromssh:$fromssh"
+#if [ "$fromssh" != "" ]; then
+if [ -n "$SSH_CLIENT" ] && [ -n "$SSH_TTY" ]; then
+    echo "ssh term: export DISPLAY=$DISPLAY"
+elif [ "$TERM" == "screen" ]; then
+    source ~/.curDisplay/${HOSTNAME}
+    echo "screen term: export DISPLAY=$DISPLAY"
+else
+    echo "export DISPLAY=$DISPLAY" > ~/.curDisplay/${HOSTNAME}
+    echo "NX term: export DISPLAY=$DISPLAY"
+fi
+#if [ $TERM != "screen" ]; then
+#    echo "export DISPLAY=$DISPLAY" > ~/.curDisplay/${HOSTNAME}
+#    echo "export DISPLAY=$DISPLAY"
+#else
+#    source ~/.curDisplay/${HOSTNAME}
+#    echo "export DISPLAY=$DISPLAY"
+#fi
+
+#--------------------------------------------------------------------------------
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
