@@ -55,6 +55,7 @@ set wrap!                                   " Make sure long lines are not wrapp
 set incsearch                               " Turn on incremental search
 
 :set number                                 " Display line numbers
+:set ruler                                  " Display line & column numbers on the status bar (bottom right)
 
 
 "------------------------------------------------------------------------------------------
@@ -125,7 +126,7 @@ let g:Tb_VSplit         = 1
 let g:Tb_MinSize        = 35
 let g:Tb_MaxSize        = 35
 let g:Tb_AutoUpdt       = 1
-"let g:Tb_UseSingleClick = 1
+let g:Tb_UseSingleClick = 1
 
 "--------------------------------------------------------------------------------
 function! SetWindowName()
@@ -236,7 +237,7 @@ autocmd! StdinReadPost      *       TbAup
 "------------------------------------------------------------------------------------------
 " Git macros
 function! GitDiff()
-    exe '!git diff % 2>&1'
+    exe '!git diff HEAD % 2>&1'
 endfunction
 map <F2> :call GitDiff()<CR>
 
