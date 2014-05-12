@@ -94,7 +94,8 @@ set si                                      " TODO: What is this for?
 
 set pastetoggle=<F12>                       " Toggle between ':set paste' and ':set nopaste'.  Pasting mouse-selected multi-line text appears staggered in 'nopaste' mode. Hit F12, then paste to prevent that.
 
-nmap <C-i> i_<Esc>r                         " Maps control-i to single caracter insertion
+" Maps control-i to single caracter insertion (Do not move this line below as it messes up what 'Ctrl+i' does)
+nmap <C-i> i_<Esc>r
 
 
 "------------------------------------------------------------------------------------------
@@ -120,7 +121,7 @@ endfunction
 map <F4> :call TNERDTree()<CR>
 
 map <F5> :TbToggle<CR>
-map <S-F5> :TbAup<CR>
+map <S-F5> :TbAup<CR>                       " TODO: What is this for?
 let g:Tb_SplitBelow     = 0
 let g:Tb_VSplit         = 1
 let g:Tb_MinSize        = 35
@@ -239,7 +240,7 @@ autocmd! StdinReadPost      *       TbAup
 function! GitDiff()
     exe '!git diff HEAD % 2>&1'
 endfunction
-map <F2> :call GitDiff()<CR>
+map <F1> :call GitDiff()<CR>
 
 "------------------------------------------------------------------------------------------
 function! <SID>FindWindow(bufName, doDebug)
