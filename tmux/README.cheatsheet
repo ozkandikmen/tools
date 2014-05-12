@@ -1,0 +1,18 @@
+TODO: Test the following stuff, copied from 'screen', and update them if not correct.
+----
+Ctrl+w [Ctrl+]c # Create a new screen window.
+Ctrl+w [Ctrl+]A # Toggle between the current screen window and the previous one you were on.
+Ctrl+w 0        # Go to screen window 0.
+Ctrl+w [Ctrl+]d # Detach current screen session.
+
+screen -ls      # List all screen session names and their status (attached, detached, etc.)
+screen -x name  # Connect to xsession named 'name'
+screen -r       # Attach to the most recent (?) screen session (if it is already detached?)  TODO - Clarify
+
+#########################################################################################
+# Provide most commonly used shortcuts and how .tmux.conf is used to change things (Ctrl+w, etc.)
+#   http://tmux.sourceforge.net/
+
+Each tmux session is a single 'tmux' process. There can only be on tmux process per machine per user.
+Within each tmux session, you can have as many tmux windows as you want.
+
