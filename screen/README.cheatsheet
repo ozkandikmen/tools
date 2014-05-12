@@ -1,0 +1,30 @@
+TODO:
+----
+Should I try to make screen remember what was on the window before an app
+such as less, vim, tig, git log, etc. started (after quitting them)?
+
+How to share a screen terminal (only one of them) with someone else?
+How to share the entire screen session (all of its terminals) with someone else?
+In both cases, either party should be able to type commands, therefore only
+one of the terminals can (must) be active so people see each other's changes?
+Or perhaps, it is beneficial for any party to look at any of the terminals.
+
+Mouse scrolling instead of Ctrl+[ followed by j/k is working, but appears to
+be on the new screen sessions. Test it, and update the commands/comments
+in .screenrc.
+
+#########################################################################################
+# Provide most commonly used shortcuts and how .screenrc is used to change things (Ctrl+A, etc.)
+# Also provide bookmarks to useful screen info web sites.
+
+Each screen session is a single 'screen' process. You can have multiples (screen -ls will produce all your screen sessions).
+Within each session, you can have as many screen windows as you want.
+
+Ctrl+a [Ctrl+]c # Create a new screen window.
+Ctrl+a [Ctrl+]A # Toggle between the current screen window and the previous one you were on.
+Ctrl+a 0        # Go to screen window 0.
+Ctrl+a [Ctrl+]d # Detach current screen session.
+
+screen -ls      # List all screen session names and their status (attached, detached, etc.)
+screen -x name  # Connect to xsession named 'name'
+screen -r       # Attach to the most recent (?) screen session (if it is already detached?)  TODO - Clarify
