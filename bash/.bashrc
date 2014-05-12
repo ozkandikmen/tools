@@ -1,16 +1,6 @@
 # .bashrc
-# This exits if we are non-interactive (fix for scp and the like)
-# 2013.01.28: Must keep the following "return" commented out until build (php) scripts
-#             are enhanced to source /tools/oss/latest.env_var.sh when it is accessible.
-#             Or else, grid based execution (qbuild) does not work, i.e. this file ends
-#             up not getting sourced after qbuild ssh's to a build machine.
-# 2013.01.29: I noticed that ssh'ing to other fedora machines with the following line
-#             commented makes acd_func.sh spew error. However, it is not happening if
-#             the line is uncommented. Also, it is not happening as ssh'ing to non-fedora
-#             machines either even when the following line is commented.
-#[ -z "$PS1" ] && return
-
-# User specific aliases and functions
+# If non-interactive (x2go session start/resume, scp, etc.), PS1 is not set and therefore the statement below exits.
+[ -z "$PS1" ] && return
 
 # Choose which simulator to use
 # Each simulator brings its own gcc, i.e. sets the path up to use their own gcc,
@@ -92,6 +82,9 @@ export LESS="-X -R -S"
 # Make grep highlight the matches in its output
 alias grep="grep --color"
 
+# Print dot files (a), full path on every line (f), use colors for dirs (C), turn on ANSI line graphics hack when printing the indentation lines (A)
+alias tree="tree -afCA"
+
 # My files in $HOME/bin are better than those introduced by /tools/oss/latest.env_var.sh :)
 export PATH=$HOME/bin:$PATH
 
@@ -132,7 +125,7 @@ alias sshdik='ssh ger-dikmeno-linux-1'
 #alias ssh2800d='ssh fpga-2800-d-linux'
 #alias ssh2800e='ssh fpga-2800-e-linux'
 alias ssh3000a='ssh fpga-3000-a-linux'
-#alias ssh3000b='ssh fpga-3000-b-linux'
+#alias ssh3000b='ssh fpga-3000-b-linux' # used as montana-linux / idte since about 2011.
 alias ssh06a='ssh fpga-2006-a-linux'    #ssh3000c='ssh fpga-3000-c-linux'
 alias ssh07a='ssh fpga-2007-a-linux'    #ssh3000d='ssh fpga-3000-d-linux'
 alias ssh08a='ssh fpga-2008-a-linux'    #ssh3160a='ssh fpga-3160-a-linux'
@@ -141,6 +134,7 @@ alias ssh11a='ssh fpga-2011-a-linux'    #ssh3460a='ssh fpga-3460-a-linux'
 alias ssh12a='ssh fpga-2012-a-linux'
 alias ssh13a='ssh fpga-2013-a-linux'
 alias ssh13b='ssh fpga-2013-b-linux'
+alias ssh13c='ssh fpga-2013-c-linux'
 
 # Scripts (/tools/oss/bin/*) of value are: qbuild, qbash, qhelp.
 # Commands of value are qstat, qhost.
@@ -221,8 +215,9 @@ function parse_git_branch_and_add_brackets {
     # for (local) branch faraday.dev that tracks remote branch mts-bert/faraday (assuming the project has branched at the remote)
     # 'sed' for remote_branch adds the closing bracket, ], only if there is at least one character in the input
     local_branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\ <=>\ /'`
-    remote_branch=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | sed -e 's/\(.\+\)/\1\]/'`
-    echo "$local_branch$remote_branch"
+    remote_branch=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | sed -e 's/\(.\+\)/\1/'`
+    test -z "$local_branch" && suffix= || { test -z "$remote_branch" && suffix="NOT-SET" ; suffix="$suffix]" ; }
+    echo "$local_branch$remote_branch$suffix"
 }
 
 bash_prompt() {
@@ -279,8 +274,9 @@ bash_prompt() {
     local UC=$EMM                 # user's color
     [ $UID -eq "0" ] && UC=$EMR   # root's color
 
+    # HISTTIMEFORMAT (history uses it) provides when the command execution started. The time on the prompt provides when it ended ==> Effectively, all commands are executed as if 'time ' is always used.
     #PS1="[${UC}\u${EMK}@${EMB}\h \${NEW_PWD}${K}\${NONE}]$ "
-    PS1="$TITLEBAR${EMC}[${UC}\u${EMk}@${EMB}\h ${EMB}\${NEW_PWD}${EMC}]${EMg}\$(parse_git_branch_and_add_brackets)${K}${NONE}\\$ "
+    PS1="$TITLEBAR${EMC}[${UC}\u${EMk}@${EMB}\h ${EMB}\${NEW_PWD}${EMC}]${EMg}\$(parse_git_branch_and_add_brackets) ${EMy}(\D{%F %T})${K}${NONE}\\$ "
     # without colors: PS1="[\u@\h \${NEW_PWD}]\\$ "
     # extra backslash in front of \$ to make bash colorize the prompt
 }
@@ -319,12 +315,16 @@ alias sourcecurdisplay='source ~/.curDisplay/${HOSTNAME}'
 alias updatecurdisplay='echo "export DISPLAY=$DISPLAY" > ~/.curDisplay/${HOSTNAME}'
 
 fromssh=`echo $DISPLAY | grep localhost`
-#echo "fromssh:$fromssh"
+echo "DEBUG: fromssh   =$fromssh"
+echo "DEBUG: SSH_CLIENT=$SSH_CLIENT"
+echo "DEBUG: SSH_TTY   =$SSH_TTY"
+echo "DEBUG: TERM      =$TERM"
 #if [ "$fromssh" != "" ]; then
+#sourcecurdisplay
 if [ -n "$SSH_CLIENT" ] && [ -n "$SSH_TTY" ]; then
     echo "ssh term: export DISPLAY=$DISPLAY"
 elif [ "$TERM" == "screen" ]; then
-    source ~/.curDisplay/${HOSTNAME}
+    sourcecurdisplay
     echo "screen term: export DISPLAY=$DISPLAY"
 else
     echo "export DISPLAY=$DISPLAY" > ~/.curDisplay/${HOSTNAME}
@@ -354,6 +354,8 @@ HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 HISTCONTROL=ignoreboth
 # ignore certain commands
 HISTIGNORE=fortune:exit:clear:pwd:ls
+# Timestamp the command execution start time
+export HISTTIMEFORMAT="%Y%m%d %H:%M:%S "
 # append to the history file, don't overwrite it
 shopt -s histappend
 
@@ -372,4 +374,6 @@ alias ll='ls -l --color'    # FPGA compiler machines is overriding this alias. S
 umask 0022
 export EDITOR=vim
 
+# Following command makes sure that xterm reads its parameters from .Xresources at its launch time.
+# If .Xresources is modified, following commands needs to be re-run and then xterm needs to be re-started before the changes to take affect.
 xrdb $HOME/.Xresources
