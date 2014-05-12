@@ -1,8 +1,10 @@
 ! Copied this from Jerias on December 11, 2013 and modified it (fonts, term size) slightly.
-! IMPORTANT: Following line must be in .bashrc in order for this file to be used when 'xterm' is started:
+! IMPORTANT: Execute the following command before launching xterm, or else the content of
+!            .Xresources will not be used when launching xterm:
 !                   xrdb $HOME/.Xresources
-! Also, changes to this file will take affect only after running the xrdb command above, or
-! just source .bashrc again.
+!            You may want to put this line into your .bashrc.
+! Also, changes to .Xresources will take affect only after running the above xrdb command again,
+! or just source .bashrc one more time.
 xterm*background:       grey10
 xterm*foreground:       white
 xterm*cursorColor:      grey90
@@ -28,3 +30,43 @@ xterm*termName:         xterm-256color
 ! Following line makes it possible to paste any l-mouse selected text from an xterm into an app on your virtual win (with regular ctrl+v)
 ! You do not need this setting in order to go the other way, e.g. copy (ctrl+c) text from a virtual win app, then click m-mouse on an xterm to paste it into.
 xterm*selectToClipboard:true
+
+! TODO: Even though the following does successfully what it says, the copy from xterm
+!       to Virtual Win appears to be broken. Fix it.
+!
+! According to http://askubuntu.com/questions/237942/how-does-copy-paste-work-with-xterm,
+! more specifically, http://www.davidsimmons.com/soft/xtermhacks/#copynpaste, following
+! line ensures a sane copy/paste between xterm and modern GUI applications.
+!
+! Background: X Window System has two different "selection buffers":
+! - CLIPBOARD:  This buffer is used when Edit->Copy/Paste of the X app is used.
+!               Since the xterm app is not written to provide Edit->Copy/Paste, this buffer
+!               it does not use this buffer. Many X applications, though, such as gvim, gedit,
+!               firefox, etc. do use this buffer.
+! - PRIMARY:    This is filled out every time mouse is used to select/highlight text on any
+!               X app, including in xterm.  In fact, this is the only buffer that xterm uses.
+!
+! COPY: What is ideal is that the text selected by the mouse on an xterm (not on X apps that
+! pop up their own window such as firefox, gedit, gvim, etc.) as well as any console app (i.e.
+! those apps whose interface is entirely within the xterm that it was launched in) such as vim,
+! less, tig, etc. would copy the selection into CLIPBOARD in addition to PRIMARY.
+! Well, the following code is what makes xterm do that.
+! One obvious benefit of this mechanism is that X apps that pop up their own window can now
+! access the copied text (via their Edit->Paste, Ctrl+V, or even perhaps middle mouse button,
+! depending on how the GUI app is written).
+!
+! Note, however, mouse selections on X apps such as gvim, firefox, gedit, etc. typically copies
+! selections only into CLIPBOARD. And, they do that ONLY IF their Edit->Copy option is selected
+! after the text selection, not necessarily by default even though they are X apps.
+!
+! PASTE: How do you paste what is on GUI/modern apps into xterm? Well, first you need to select
+! Edit->Copy on those X apps (firefox, gedit, etc.) after selecting the text as described above.
+! Now, the selection is in CLIPBOARD. Come back to xterm and click the middle button (or
+! Left+Right button or Shift+Insert) to paste it (or on any console app such as vim running on
+! the xterm). What makes xterm use CLIPBOARD in this paste action is again the following code.
+!
+! So, in summary, the following code achieves two things:
+! - Mouse selections on xterm makes xterm copy it into both CLIPBOARD & PRIMARY
+! - Mouse middle click to paste on an xterm gets the "text" from PRIMARY, and if missing,
+!   from CLIPBOARD.
+XTerm*VT100.translations: #override <Btn1Up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0)
