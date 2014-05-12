@@ -1,5 +1,14 @@
+# TODO
+# 1 - Install & test latexdiff
+
+#################################################################################
 # Changes in file1 between SHA=15dc8 and its parent.
-# TODO: Is parent the immediate parent of 15dc8 or is it a parent where file1 was modified the last time before 15dc8?
+#       15dc8       file1, file2    (modified)
+#       abc12       file3           (modified)  -  parent of 15dc8
+#       15398       file1, file4    (modified)  -  parent of abc12
+#       .
+# Note that file1 in abc12 and 15398 are identical. Therefore, even though parent of 15dc8 is abc12 where file1 is not modified,
+# there is no ambiguity in 'parent' from the perspective of 'file1' when describing what the command below does.
 git diff 15dc8^! -- file1     <=>     git diff 15dc8^..15dc8 -- file1
 
 # Changes in file1 between the listed 2 things
