@@ -52,12 +52,6 @@ qt_designer=no
     # ISE (foundation)
     #if [ "$sim" != "riviera" -a $qt_designer == "no" ]; then source /tools/xilinx/ISE/foundation/latest.env_var.sh ; fi
 
-    # Sun Java - to use with jdu
-    #source /tools/sun/jre/latest.env_var.sh
-
-    # Acrobat reader
-    source /tools/adobe/acrobat/latest.env_var.sh
-
 # gtkterm - Hyperterminal equivalent for linux
 
 
@@ -78,6 +72,9 @@ alias mv='mv -i'
 # With the LESS env var, 'man' also works like less does.
 #alias less='less -R -S'
 export LESS="-X -R -S"
+
+# htop does not like any TERM but xterm. Ex: If xterm=screen, htop does not work properly.
+alias htop='TERM=xterm htop'
 
 # Make grep highlight the matches in its output
 alias grep="grep --color"
