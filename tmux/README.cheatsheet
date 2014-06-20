@@ -1,18 +1,54 @@
-TODO: Test the following stuff, copied from 'screen', and update them if not correct.
-----
-Ctrl+w [Ctrl+]c # Create a new screen window.
-Ctrl+w [Ctrl+]A # Toggle between the current screen window and the previous one you were on.
-Ctrl+w 0        # Go to screen window 0.
-Ctrl+w [Ctrl+]d # Detach current screen session.
-
-screen -ls      # List all screen session names and their status (attached, detached, etc.)
-screen -x name  # Connect to xsession named 'name'
-screen -r       # Attach to the most recent (?) screen session (if it is already detached?)  TODO - Clarify
-
 #########################################################################################
 # Provide most commonly used shortcuts and how .tmux.conf is used to change things (Ctrl+w, etc.)
 #   http://tmux.sourceforge.net/
 
-Each tmux session is a single 'tmux' process. There can only be on tmux process per machine per user.
+Each tmux session is a single 'tmux' process.
+You can have as many 'tmux' process as you want running on the same host.
 Within each tmux session, you can have as many tmux windows as you want.
 
+.tmux.conf              # Configuration file, including for key bindings, of tmux.
+tmux                    # Create a new tmux session.
+
+The configuration file is read once when starting a new tmux session.
+If you make changes to the configuration file, and you want that to take affect on
+the currently running tmux session, run on any of its windows: 'tmux source-file <path/file>'.
+If the file is in your $HOME, remember to do ~/<filename>.
+
+Ctrl+w                  # Configured it to be the tmux cmd initiation key (I used to use Ctrl+a in 'screen') in the configuration file.
+
+Ctrl+w c                # Create a new window in the current tmux session.
+Ctrl+w d                # Detach current tmux session.
+Ctrl+w ,                # Rename window title to be whatever you type
+
+Ctrl+w Ctrl+w           # Toggle between the current window and the previous one you were on.
+Ctrl+w w                # Bring up a list of all windows, use j/k to pick one, and hit enter to switch to that window.
+Ctrl+w [Ctrl+]n         # Move to the next window
+Ctrl+w [Ctrl+]p         # Move to the prev window
+Ctrl+w n                # Go to window n (1, 2, ..., 9, 10)
+Ctrl+w Alt+n            # Switch to window 1n.  Ex: 11, 12, .., 19.
+
+Ctrl+x ???              # Split the window (where the cursor is active) vertically
+Ctrl+x ???              # Split the window (where the cursor is active) horizontally
+Ctrl+w j                # On a vertically split window, move the cursor to the one on top           (like in vim cursor movement)
+Ctrl+w k                # On a vertically split window, move the cursor to the one on bottom        (like in vim cursor movement)
+Ctrl+w l                # On an horizontally split window, move the cursor to the one on the right  (like in vim cursor movement)
+Ctrl+w h                # On an horizontally split window, move the cursor to the one on the left   (like in vim cursor movement)
+
+MouseL <select>         # Copy the selection into the current tmux sessions (available to all its windows) into its own buffer
+MouseM                  # Paste what is in the selection
+
+Shift+MouseL <select>   # Copy the selecting into X's copy buffer so you can paste it into other applications' window
+Shift+MouseM            # Paste what is in the X's copy buffer so you can get stuff from other applications' window into a window in tmux session.
+
+tmux ls                 # List all tmux session names and their status (attached, detached, etc.)
+tmux a                  # Attach to the last detached tmux session. Last means the last time you detached from, not the last on in the list of tmux sessions.
+tmux a -t n             # Attach to tmux session number n  (They are numbered 0, 1, etc. List them to see)
+                        # You can attach to an already attached tmux session on a different terminal.
+                        # If so, all running attachments see what is typed and printed to screen.
+                        # Likewise, if a window within the tmux session is changed, all attached sessions repeat the action.
+tmux attach             # Full form of 'tmux a'.
+
+#########################################################################################
+tmux can be scripted. For instance, the executable bash script 'admin' opens up a new
+tmux session, creates and names bunch of windows in it, splits some of the windows vertically
+and horizontally, etc.

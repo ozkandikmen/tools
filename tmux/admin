@@ -1,0 +1,55 @@
+#!/bin/bash
+SESSION=admin
+
+tmux -2 new-session -d -s $SESSION
+
+tmux new-window -t $SESSION -n 'misc'
+tmux new-window -t $SESSION -n 'idte'
+tmux send-keys "ssh idte.ds.jdsu.net" C-m
+tmux split-window -h
+tmux send-keys "ssh idte.ds.jdsu.net" C-m
+tmux select-pane -t 0
+tmux resize-pane -D 20
+
+
+tmux new-window -t $SESSION -n 'idte-dev'
+tmux send-keys "ssh idte-dev.ds.jdsu.net" C-m
+
+tmux new-window -t $SESSION -n 'misc2'
+#tmux send-keys "ssh fpga-2007-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2008a'
+tmux send-keys "ssh fpga-2008-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2010a'
+tmux send-keys "ssh fpga-2010-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2011a'
+tmux send-keys "ssh fpga-2011-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2012a'
+tmux send-keys "ssh fpga-2012-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2013a'
+tmux send-keys "ssh fpga-2013-a-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2013b'
+tmux send-keys "ssh fpga-2013-b-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n '2013c'
+tmux send-keys "ssh fpga-2013-c-linux.ds.jdsu.net -t   htop  ';' exec /bin/bash" C-m
+tmux new-window -t $SESSION -n 'shz'
+tmux split-window -h
+tmux select-pane -t 0
+tmux send-keys "ssh idte-shz.ds.jdsu.net" C-m
+tmux select-pane -t 1
+tmux send-keys "ssh shz-fpga-2660-a-linux.ds.jdsu.net" C-m
+tmux split-window -v
+tmux select-pane -t 2
+tmux send-keys "ssh shz-vm-host-1.ds.jdsu.net" C-m
+tmux new-window -t $SESSION -n 'grid'
+tmux send-keys "/home/mit47879/bin/gridstat" C-m
+tmux new-window -t $SESSION -n 'kvm'
+
+
+# Set default window
+tmux select-window -t $SESSION:1
+
+# Rename first window
+tmux rename-window -t $SESSION:1 admin
+
+# Attach to session
+tmux -2 attach-session -t $SESSION
