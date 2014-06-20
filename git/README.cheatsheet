@@ -35,11 +35,13 @@ Any valid SHA value can be used in place of 'HEAD' in the lines above.
 
 # log
 git log --author="Ozkan Dikmen" # Commits by Ozkan Dikmen
-git log --stat                  # Display path/file names involved in each commit object log displays info about
+git log --stat                  # Display the amount of change that each file in the commit objects (that git log shows) were subject to.
+git log --name-only             # Display path/file names involved in each commit object log displays info about. No add'l info about the amount of change to each file is displayed.
 git log -3                      # Display most recent 3 commit object, starting with what your wcp is "seeing"
 
 # show
-git show --stat 15cd8           # Display path/file names involved in the commit object SHA=15dc8
+git show --stat 15cd8           # Display the amounf of change that each file in the commit object SHA=15dc8 is subject to.
+git show --name-only 15cd8      # Display path/file names involved in the commit object SHA=15dc8
 
 # Cherry-pick: When cherry-pick is executed by person 1, author of the original commit object (person 2) is
 # transferred over to the new commit object, and person 1 appears as committer of the new commit object.
