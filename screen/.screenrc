@@ -55,6 +55,6 @@ defscrollback 3000
 # Either of the following works, however, due to hardstatus set to display seconds of the current time,
 # the display will show the last page every second. So, take out seconds display if you want to
 # be able to use mouse scrolling.
+# See https://wiki.archlinux.org/index.php/GNU_Screen
 termcapinfo xterm|xterms|xs ti=\E7\E[?47
-#termcapinfo xterm ti@:te@
-
+#termcapinfo xterm* ti@:te@
