@@ -2,6 +2,17 @@ TODO:
 ----
 Is it possible to create a horizontal scroll bar in vim as well as gvim?
 
+Monitor development on neovim @ neovim.org (crowdsourced vim revamp so modern GUI and extensible plugins can be written for it)
+It started around April, 2014.
+
+Install one of the following status bar managers:
+    vim-airline         https://github.com/bling/vim-airline        (Very light & fast. 100% vimscript)
+    vim-powerline       https://github.com/Lokaltog/vim-powerline   (Deprecated in favor of 'powerline')
+    powerline           https://github.com/Lokaltog/powerline
+                        Written in python at the core and exposes various bindings such that it
+                        can style status lines not only in vim, but also tmux, bash, zsh, and others.
+Should probably install 'powerline'.
+
 Change word boundary: _ should be considered as part of a word.
                       -, in certain file types, should also be considered as part of a word
                       This setting will affect the way 'Shift+*', 'dw', 'cw', etc. work.
@@ -36,9 +47,6 @@ gvim does not have this problem. Fix this.
 
 Investigate vim 'sessions' and write about it here.
 
-Select/Double click path/file in a file within (g)vim should open up that file in a new buffer
-provided of course it is a valid path. Write a function, if necessary, in .vimrc to do that.
-
 
 ====================================================================================================
 Ctrl+v activates visual column editing mode
@@ -47,8 +55,17 @@ viw         " Select word in visual mode starting where the cursor is until the 
 
 :set nonu   " Disable line numbering so I can select text with l-mouse without line numbers :)
 
-"pyy        " Copy current line into buffer 'p'  (p is arbitrary)
-"pp         " Paste what is in the buffer 'p'    (The buffer p is the second p)
+
+"pyy        " Copy current line into buffer 'p'  (p is arbitrary. Can be any letter or number or even signs like +, -, etc.).
+            " This buffer can now be used in other vim processes as well.
+"pp         " Paste what is in the buffer 'p'    (The first p refers to the buffer p)
+
+[Ctrl+]v    " See below
+select text " See below
+"py         " Yank the selection into buffer 'p' (p is arbitrary. Can be any letter or number or even signs like +, -, etc.).
+            " This buffer can now be used in other vim processes as well.
+"pp         " Paste what is in the buffer 'p'    (The frist p refers to the buffer p)
+
 
 30|         " Jump to column 30 on the current line. Works only if there is at least 30 characters on the line
 
@@ -58,6 +75,10 @@ gqap        " Indent the paragraph where the cursor is at. Blank lines are the b
 .\{-}       " Non-greedy search, equivalent to '.*' in standard regexp.
 
 qa          " Start record macro 'a'. When done, hit q again to stop recording.
+            " Macros can call/execute other macros.
+"ap         " Do this on a blank line. It pastes what was recorded in buffer 'a' (could be the macro just recorded).
+            " You can now change it. Then, select it in visual mode: 0 v $ h
+            " Now, copy it over the same buffer (a): "ay
 @a          " Execute macro 'a' once.
 10@a        " Execute macro 'a' 10 times.
 
@@ -69,9 +90,14 @@ Ctrl+w o    " Close all the 'window's (if split) other than where the cursor is
 5 s         " Deletes 5 characters forward starting with the one under the cursor and leaves you in insert mode.
             " <=> 5 x i
 
-g Ctrl+G    " Provides various statistics about the line & character under the cursor: Character position, total 
+g Ctrl+G    " Provides various statistics about the line & character under the cursor: Character position, total
             " character count (of the line and file), etc.
 
+g f         " Open the path/file that is under the cursor (assuming it is a valid path/name).
+            " Did not test this on path/file containing space in it - probably don't care, though :)
+
+gn          " My shortcut (see .vimrc) for ':bn', which shows the file in the "next" buffer (n is for next)
+gp          " My shortcut (see .vimrc) for ':bp', which shows the file in the "prev" buffer (p is for previous)
 
 ====================================================================================================
 In order to view files in a nice fixed size font, take these steps:

@@ -94,8 +94,12 @@ set si                                      " TODO: What is this for?
 
 set pastetoggle=<F12>                       " Toggle between ':set paste' and ':set nopaste'.  Pasting mouse-selected multi-line text appears staggered in 'nopaste' mode. Hit F12, then paste to prevent that.
 
-" Maps control-i to single caracter insertion (Do not move this line below as it messes up what 'Ctrl+i' does)
+" Maps control-i to single character insertion (Do not move this line below as it messes up what 'Ctrl+i' does)
 nmap <C-i> i_<Esc>r
+
+" Maps gn to switch to viewing the next buffer. The order of the buffers are as it appears when F5 is pressed - see below, where gbuf is explained)
+map gn :bn<CR>
+map gp :bp<CR>
 
 
 "------------------------------------------------------------------------------------------
