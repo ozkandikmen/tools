@@ -91,6 +91,8 @@ set nu                                      " TODO: What is this for?
 set sta                                     " TODO: What is this for?
 set sr                                      " TODO: What is this for?
 set si                                      " TODO: What is this for?
+set mouse=a                                 " Make sure mouse scroll (up/down) with its wheel has the effect of pressing Ctrl+e/y (move up/down in the buffer being viewed) in vim's running on console.
+                                            " This also makes mouse left clicks move the cursor to the clicked spot, again in vim's running on console.
 
 set pastetoggle=<F12>                       " Toggle between ':set paste' and ':set nopaste'.  Pasting mouse-selected multi-line text appears staggered in 'nopaste' mode. Hit F12, then paste to prevent that.
 

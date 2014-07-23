@@ -48,6 +48,9 @@ tmux a -t n             # Attach to tmux session number n  (They are numbered 0,
                         # Likewise, if a window within the tmux session is changed, all attached sessions repeat the action.
 tmux attach             # Full form of 'tmux a'.
 
+export TERM=xterm       # tmux by default sets TERM to 'screen', and that breaks mouse scrolling and left clicking funcitonality in vim running on console.
+                        # Setting TERM to xterm, complemented by the setup in .vimrc to enable mouse scrolling/left-clicking, fixes the issue with vim running on consoles within tmux.
+
 #########################################################################################
 tmux can be scripted. For instance, the executable bash script 'admin' opens up a new
 tmux session, creates and names bunch of windows in it, splits some of the windows vertically
