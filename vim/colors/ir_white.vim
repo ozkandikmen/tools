@@ -73,8 +73,8 @@ hi Cursor                       guifg=NONE      guibg=#a0a0a0   gui=NONE
 hi LineNr                       guifg=#808080   guibg=#ffffff   gui=NONE
 
 hi VertSplit                    guifg=#cfcfcf   guibg=#cfcfcf   gui=NONE
-hi StatusLine                   guifg=#e1e1e1   guibg=#1f1f1f   gui=bold
-hi StatusLineNC                 guifg=#010101   guibg=#cfcfcf   gui=NONE
+hi StatusLine                   guifg=#414141   guibg=#21e101   gui=bold
+hi StatusLineNC                 guifg=#e1e1e1   guibg=#1f1f1f   gui=NONE
 
 hi Folded                       guifg=#898989   guibg=#ffffff   gui=NONE
 hi Title                        guifg=#010101   guibg=NONE      gui=bold
