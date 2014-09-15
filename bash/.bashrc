@@ -18,41 +18,45 @@ sim=none
 qt_designer=no
 
     # Clearcase
-    source /tools/rational/clearcase/latest.env_var.sh
+    alias source_clearcase='source /tools/rational/clearcase/latest.env_var.sh'
 
-    # Git (git-tool setup to make its use convenient)
-    # Handled by /tools/oss/latest.env_var.sh
-
-    # Subversion (rapidsvn is a nice GUI frontend)
-    # TODO: Remove the following directory from the system after the data in svn is migrated to git
-    #       Dec, 2012: I created /tools/oss/svn/scripts to contain FPGA's svn-tool. See that script for its purpose.
-    source /tools/subversion/latest.env_var.sh
-
-    # Open source tools (Cloud/grid, Jedit, git, meld, tig, etc.)
-    source /tools/oss/latest.env_var.sh
+    # Open source tools (Cloud/grid, Jedit, git, svn, meld, tig, etc.)
+    alias source_oss='source /tools/oss/latest.env_var.sh'
 
     # Code Review tools
-    source /tools/smartbear/peerreview/latest.env_var.sh
+    alias source_codereview='source /tools/smartbear/peerreview/latest.env_var.sh'
 
     # Modelsim (Due to name mismatch (vsim), use either aldec or mentor at a time)
-    if [ "$sim" == "modelsim" ]; then source /tools/mentor/modelsim/SE/latest.env_var.sh ; fi
+    alias source_modelsim='if [ "$sim" == "modelsim" ]; then source /tools/mentor/modelsim/SE/latest.env_var.sh ; fi'
 
     # Aldec Riviera (Due to name mismatch (vsim), use either aldec or mentor at a time)
-    if [ "$sim" == "riviera" ]; then source /tools/aldec/riviera/latest.env_var.sh ; fi
+    alias source_riviera='if [ "$sim" == "riviera" ]; then source /tools/aldec/riviera/latest.env_var.sh ; fi'
 
     # Visual Elite (now Mentor)
-    #source /tools/summit/visual_elite/latest.env_var.sh
+    #alias source_visualelite='source /tools/summit/visual_elite/latest.env_var.sh'
 
     # Synplify
-    #source /tools/synplicity/synplify/latest.env_var.sh
+    #alias source_synplify='source /tools/synplicity/synplify/latest.env_var.sh'
 
     # Quartus
-    #source /tools/altera/quartus/latest.env_var.sh
+    #alias source_quartus='source /tools/altera/quartus/latest.env_var.sh'
 
     # ISE (foundation)
-    #if [ "$sim" != "riviera" -a $qt_designer == "no" ]; then source /tools/xilinx/ISE/foundation/latest.env_var.sh ; fi
+    #alias source_ise='if [ "$sim" != "riviera" -a $qt_designer == "no" ]; then source /tools/xilinx/ISE/foundation/latest.env_var.sh ; fi'
 
 # gtkterm - Hyperterminal equivalent for linux
+alias sourcetools='source_oss;source_clearcase;source_codereview'
+
+host=`hostname -s`
+
+if [ `echo $host | grep "dikmeno-linux" | wc -l` == 1 ]; then
+    echo "Appears we are on a SW client, $host, so setting up env for SW dev (git, etc.)"
+    export KS_DISCIPLINE=sw
+    sourcetools;
+elif [ `echo $host | grep "\-linux" | wc -l` == 1 ]; then
+    echo "Appears we are on an FPGA client, $host, so setting up env for FPGA dev (git, EDA tools, etc.)"
+    sourcetools;
+fi
 
 
 #########################
