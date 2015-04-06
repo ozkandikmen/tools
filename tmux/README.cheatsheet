@@ -15,6 +15,10 @@ the currently running tmux session, run on any of its windows: 'tmux source-file
 If the file is in your $HOME, remember to do ~/<filename>.
 
 Ctrl+w                  # Configured it to be the tmux cmd initiation key (I used to use Ctrl+a in 'screen') in the configuration file.
+Ctrl+w :                # Start typing a tmux command such as
+                        # - 'split-window -v'      to vertically split the current window
+                        # - 'move-window -t 12'    to move the current window to number 12
+                        # - 'move-window -t right' to move the current window to the tmux session, named 'right' (assuming 2 tmux sessions are running on the same machine, and the other one is named 'right')
 
 Ctrl+w c                # Create a new window in the current tmux session.
 Ctrl+w d                # Detach current tmux session.
@@ -27,8 +31,8 @@ Ctrl+w [Ctrl+]p         # Move to the prev window
 Ctrl+w n                # Go to window n (1, 2, ..., 9, 10)
 Ctrl+w Alt+n            # Switch to window 1n.  Ex: 11, 12, .., 19.
 
-Ctrl+x ???              # Split the window (where the cursor is active) vertically
-Ctrl+x ???              # Split the window (where the cursor is active) horizontally
+Ctrl+w :split-window -v # Split the window (where the cursor is active) vertically
+Ctrl+w :split-window -h # Split the window (where the cursor is active) horizontally
 Ctrl+w j                # On a vertically split window, move the cursor to the one on top           (like in vim cursor movement)
 Ctrl+w k                # On a vertically split window, move the cursor to the one on bottom        (like in vim cursor movement)
 Ctrl+w l                # On an horizontally split window, move the cursor to the one on the right  (like in vim cursor movement)
