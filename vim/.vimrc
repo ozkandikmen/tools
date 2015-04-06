@@ -1,3 +1,4 @@
+set runtimepath+=$HOME/.vim
 set dir=$HOME/.vim/my_dirs/swp                  " vim saves 'lock' files here
 set backupdir=$HOME/.vim/my_dirs/bkup           " vim saves backup of files, if created, here
 set undodir=$HOME/.vim/my_dirs/undodir          " ???
@@ -251,6 +252,7 @@ map <F1> :call GitDiff()<CR>
 "------------------------------------------------------------------------------------------
 function! <SID>FindWindow(bufName, doDebug)
   " Try to find an existing window that contains our buffer.
+  " Tabbar related
   let l:bufNum = bufnr(a:bufName)
   if l:bufNum != -1
     let l:winNum = bufwinnr(l:bufNum)
