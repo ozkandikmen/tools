@@ -1,0 +1,24 @@
+# TODO
+# 1 -
+
+#################################################################################
+# Cursor movements - Let 'N' denote cursor position on a non-space character
+#                        'S' denote cursor position on a space character or end of line
+Ctrl+A                  # Go to beginning of line
+Ctrl+E                  # Go to end of line
+Ctrl+U                  # Delete everything from N/S through the beginning of the line (backward)
+Ctrl+K                  # Delete everything from N/S through the end of the line (forward)
+
+
+Ctrl+B                  # Move cursor backward by one character
+Ctrl+F                  # Move cursor forward by one character
+
+
+Alt+B                   # Move cursor backward to the first character of the word before N/S.
+                        # Immediate spaces before S are skipped to reach the word, if any, and the cursor is brought onto the first character of that word.
+Alt+F                   # Move cursor forward to the closest space (forward) after N/S.
+                        # Immediate spaces after S are skipped to reach the word, if any, and the space after the word is where the cursor is brought into.
+
+
+Alt+D                   # Delete from N/S until the closest space (forward)
+                        # Immediate spaces after S are all deleted to reach the word, if any. The word is deleted, too, and the cursor sits on the space that used to be after the word just got deleted.
