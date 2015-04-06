@@ -14,33 +14,65 @@ git diff 15dc8^! -- file1     <=>     git diff 15dc8^..15dc8 -- file1
 # Changes in file1 between the listed 2 things
 git diff 15dc8    -- file1      # Filesystem vs SHA=15dc8
 git diff          -- file1      # Filesystem vs Stage (index)
-git diff HEAD     -- file1      # Filesystem vs HEAD  (last committed that your wcp sees w/o any local mod to file1)
-git diff --cached -- file1      # Stage      vs HEAD  (last committed that your wcp sees w/o any local mod to file1)
-
-# Changes in file1 between what is in HEAD (last committed that your wcp sees) and a specific commit (SHA=15dc8)
-git diff 15dc8..HEAD -- file1
+git diff HEAD     -- file1      # Filesystem vs HEAD  (HEAD means last commit object that your wcp sees w/o any local mod to file1)
+git diff --cached -- file1      # Stage      vs HEAD  (HEAD means last commit object that your wcp sees w/o any local mod to file1)
+git diff 15dc8..HEAD -- file1   # SHA=15dc8  vs HEAD  (HEAD means last commit object that your wcp sees w/o any local mod to file1)
+git diff -m ....                # Use it when dealing with merge commits (Note: It can be a bit confusing at first).
+                                # You may want to initially use 'git log -m ...' to be more familiar with the '-m' output.
 
 # Ways to access commits, used with any git command that takes SHA as an argument (log, diff, show, etc.)
-HEAD
-HEAD^    <=> HEAD^1             # Parent commit object of HEAD
-HEAD^2                          # Grandparent commit object of HEAD
-HEAD~1                          # TODO: ??
-HEAD^!   <=> HEAD^..HEAD
+# Run 'git help rev-parse', and read the sections on "Specifying Revisions" and "Specifying Ranges" to learn all details.
+HEAD                            # The commit object as pointed by your working copy
+HEAD^    <=> HEAD^1             # First  (because of '1') parent commit object of HEAD
+HEAD^2                          # Second (because of '2') parent commit object of HEAD (Would be valid if HEAD points at a 'merge' object, i.e. has at least 2 parents)
+HEAD^3                          # Third  (because of '3') parent commit object of HEAD (Would be valid if HEAD points at an object with 3 or more parents)
+HEAD~1                          # The commit object that is the first  (because of '1') ancestor of HEAD, following only the first parents (if encountered objects have 2 or more parents)
+HEAD~2                          # The commit object that is the second (because of '2') ancestor of HEAD, following only the first parents (if encountered objects have 2 or more parents)
+HEAD^!   <=> HEAD^..HEAD        # in the context of diff.
+         <=> HEAD^  HEAD        # same as above.
+<rev>^!  <=> <rev> ^<revp1> 
+                   ^<revp2>
+                    .           # in the context of rev-parse.  All commit objects reachable by <rev> but not reachable by <revp1>, <revp2>, etc. where revp1/2/.. are (immediate) parents of <rev> (More than one if <rev> is a 'merge' object).
 HEAD^...HEAD                    # Some git commands work in one chronological path. Triple period allows any order here.
 Any valid SHA value can be used in place of 'HEAD' in the lines above.
+So, in summary:
+   ^<n> format allows you to select the nth parent of the commit (relevant in merges).
+   ~<n> format allows you to select the nth ancestor commit, always following the first parent.
+Note:  HEAD^^ is the same as HEAD~2, however, HEAD^2 is NOT the same as HEAD~2. 
 
+# --first-parent:
+                                # Strictly speaking, one way to visualize it is by analyzing the output of 'git cat-file -p <commitSHA>'.
+                                # The first '^parent ...' is the SHA of the commit object that is the 'first-parent' of <commitSHA>.
+                                # For non-merge commits, there is only one '^parent' line in cat-file output except for the very first
+                                # commit object in the repo, which does not have a parent. For merge commits, there is at least 2 '^parent'
+                                # lines. This 'first' parent is what is pointed at whenever a git command (optionally) takes --first-parent
+                                # argument. There are multiple ways to create a merge commit object, the obvious one is by executing
+                                # 'git merge ...'.
+                                #   wcp1> git merge wcp2
+                                #   wcp1> A merge commit object is just created where the first parent is what was pointed by 'wcp1' until the merge.
+                                #         The second parent is what is pointed by 'wcp2'.
+                                # In this example, I used wcp1 and wcp2 to also refer to branch names although they stand for 'working copy 1/2'.
 
-# --first-parent ... TODO: Write about it
-
+# How to obtain blob objects (Suppose current directory is within a wcp):
+git log -1                      # Pick the SHA that is displayed in the output, i.e. $commitSHA
+git cat-file -p $commitSHA      # Pick the SHA that is displayed in the output for tree SHA, i.e. $treeSHA
+git ls-tree $treeSHA            # For the current directory, it lists the file names and blob SHA's for each file. Pick $blobSHA you want to take a look.
+git cat-file blob $blobSHA      # Contents of the file whose blob SHA is $blobSHA. Note that this is full content. That's how git stores files.
+                                # You may now wonder if this is inefficient way of storing files. No, it is not. There is packing (occasionally) and
+                                # compression (all the time) run under the hood when various git commands are executed. So, the repo does not store
+                                # files the way you see at the output of this command (cat-file blob ...).
 
 # log
-git log --author="Ozkan Dikmen" # Commits by Ozkan Dikmen
-git log --stat                  # Display the amount of change that each file in the commit objects (that git log shows) were subject to.
-git log --name-only             # Display path/file names involved in each commit object log displays info about. No add'l info about the amount of change to each file is displayed.
-git log -3                      # Display most recent 3 commit object, starting with what your wcp is "seeing"
+git log --author="Ozkan Dikmen"         # Commits by Ozkan Dikmen
+git log -3                              # Display most recent 3 commit object, starting with what your wcp is "seeing"
+git log --stat                          # Display the amount of change that each file in the commit objects (that git log shows) were subject to.
+git log --name-only                     # Display path/file names involved in each commit object log displays info about. No add'l info about the amount of change to each file is displayed.
+git log --name-only -m                  # Same as previous cmd except that if a commit object is a merge commit, multiple outputs are displayed, one for each parent.
+git log --name-only -m --first-parent   # Same as previous cmd except that if a commit object is a merge commit, only one output is displayed, the one against first parent.
+                                        # This is effectively going to show (for merge commits) which files were brought into the (then-)current branch with that merge commit.
 
 # show
-git show --stat 15cd8           # Display the amounf of change that each file in the commit object SHA=15dc8 is subject to.
+git show --stat 15cd8           # Display the amount of change that each file in the commit object SHA=15dc8 is subject to.
 git show --name-only 15cd8      # Display path/file names involved in the commit object SHA=15dc8
 
 # Cherry-pick: When cherry-pick is executed by person 1, author of the original commit object (person 2) is
@@ -61,6 +93,6 @@ git branch -D branchname        # Delete local branch 'branchname'
 ....                            # TODO: Provide remote branch delete command here
 
 # rebase
-....                            # TODO: Provide common uses of this command from git-tool.  Describe interactive rebase, too.
+git rebase -i                   # Ex: If your cwd is a wcp with local commit(s), this commit will interactively allow you to reorder, merge, amend (i.e. split) them and/or change commit comments.
 
 # tag
