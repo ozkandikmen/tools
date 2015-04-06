@@ -1,0 +1,5 @@
+If you see this file, remember to execute the following commands as well because
+git submodules are used for some stuff such as vim plugins (as of April, 2015):
+- git submodule init
+- git submodule update
+
