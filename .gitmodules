@@ -1,0 +1,27 @@
+[submodule "vim/plugins_git/GlobalOptions"]
+	path = vim/plugins_git/GlobalOptions
+	url = https://github.com/vim-scripts/GlobalOptions
+[submodule "vim/plugins_git/ctrlp.vim"]
+	path = vim/plugins_git/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim
+[submodule "vim/plugins_git/mru"]
+	path = vim/plugins_git/mru
+	url = https://github.com/yegappan/mru
+[submodule "vim/plugins_git/nerdtree"]
+	path = vim/plugins_git/nerdtree
+	url = https://github.com/scrooloose/nerdtree
+[submodule "vim/plugins_git/tabular"]
+	path = vim/plugins_git/tabular
+	url = https://github.com/godlygeek/tabular
+[submodule "vim/plugins_git/vim-airline"]
+	path = vim/plugins_git/vim-airline
+	url = https://github.com/bling/vim-airline
+[submodule "vim/plugins_git/vim-fugitive"]
+	path = vim/plugins_git/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "vim/plugins_git/vim-indent-guides"]
+	path = vim/plugins_git/vim-indent-guides
+	url = https://github.com/nathanaelkane/vim-indent-guides
+[submodule "vim/plugins_git/vim-surround"]
+	path = vim/plugins_git/vim-surround
+	url = https://github.com/tpope/vim-surround
