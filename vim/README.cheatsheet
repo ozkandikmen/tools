@@ -39,8 +39,6 @@ Parse *.prj & load all files into a new (g)vim with a module hierarchy view (req
 the input files and associating instantiations, i.e. module names, to files where their definitions
 and/or implementations appear). Do this for (sys) verilog only.
 
-Fix ERROR in loading a brand new gvim through gbuf. It talks something about cdpath.
-
 My vim (on specific hosts?) has the problem of going into insert mode when '0' is pressed
 after certain operations (after being in insert mode, hit Esc, then '0' is back to insert?).
 gvim does not have this problem. Fix this.
@@ -50,6 +48,7 @@ Investigate vim 'sessions' and write about it here.
 
 ====================================================================================================
 Ctrl+v activates visual column editing mode
+,           " Currently set as the <leader>. Take a look at vimrc files for its use.
 
 viw         " Select word in visual mode starting where the cursor is until the word boundary is reached
 
@@ -93,11 +92,11 @@ Ctrl+w o    " Close all the 'window's (if split) other than where the cursor is
 g Ctrl+G    " Provides various statistics about the line & character under the cursor: Character position, total
             " character count (of the line and file), etc.
 
-g f         " Open the path/file that is under the cursor (assuming it is a valid path/name).
+gf          " Open the path/file that is under the cursor (assuming it is a valid path/name).
             " Did not test this on path/file containing space in it - probably don't care, though :)
 
-gn          " My shortcut (see .vimrc) for ':bn', which shows the file in the "next" buffer (n is for next)
-gp          " My shortcut (see .vimrc) for ':bp', which shows the file in the "prev" buffer (p is for previous)
+an          " My shortcut (see .vimrc) for ':bn', which shows the file in the "next" buffer (n is for next)
+ap          " My shortcut (see .vimrc) for ':bp', which shows the file in the "prev" buffer (p is for previous)
 
 ====================================================================================================
 In order to view files in a nice fixed size font, take these steps:
