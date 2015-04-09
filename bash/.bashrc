@@ -2,6 +2,13 @@
 # If non-interactive (x2go session start/resume, scp, etc.), PS1 is not set and therefore the statement below exits.
 [ -z "$PS1" ] && return
 
+#########################
+# Source global definitions
+#########################
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
 # Choose which simulator to use
 # Each simulator brings its own gcc, i.e. sets the path up to use their own gcc,
 # which creates problems when compiling C files using standard gcc.
@@ -36,16 +43,16 @@ qt_designer=no
     #alias source_visualelite='source /tools/summit/visual_elite/latest.env_var.sh'
 
     # Synplify
-    #alias source_synplify='source /tools/synplicity/synplify/latest.env_var.sh'
+    alias source_synplify='source /tools/synplicity/synplify/latest.env_var.sh'
 
     # Quartus
-    #alias source_quartus='source /tools/altera/quartus/latest.env_var.sh'
+    alias source_quartus='source /tools/altera/quartus/latest.env_var.sh'
 
     # ISE (foundation)
     #alias source_ise='if [ "$sim" != "riviera" -a $qt_designer == "no" ]; then source /tools/xilinx/ISE/foundation/latest.env_var.sh ; fi'
 
 # gtkterm - Hyperterminal equivalent for linux
-alias sourcetools='source_oss;source_clearcase;source_codereview'
+alias sourcetools='source_clearcase;source_codereview;source_synplify;source_quartus;source_oss'
 
 host=`hostname -s`
 
@@ -69,8 +76,7 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
-# -R option makes 'less' interpret colors correctly similar to what 'more' does by default,
-# however, searching for text becomes not possible.
+# -R option makes 'less' interpret colors correctly similar to what 'more' does by default, however, searching for text becomes not possible.
 # -S has to do with line wrapping
 # -X prevents less from remembering the content of the screen prior to running it.
 # With the LESS env var, 'man' also works like less does.
@@ -80,22 +86,23 @@ export LESS="-X -R -S"
 # htop does not like any TERM but xterm. Ex: If xterm=screen, htop does not work properly.
 alias htop='TERM=xterm htop'
 
+# -c: Show full command line (all the args that were passed when the process got started)
+# -M: Display memory size in human readable way
+alias top='top -M -c'
+
+# Grid engine - process status
+alias qstat='qstat -u "*"'
+
+# Display tree style process map, i.e. parent-child relations are displayed graphically
+alias pstree='pstree -Gpl'
+
 # Make grep highlight the matches in its output
 alias grep="grep --color"
 
 # Print dot files (a), full path on every line (f), use colors for dirs (C), turn on ANSI line graphics hack when printing the indentation lines (A)
 alias tree="tree -afCA"
 
-# My files in $HOME/bin are better than those introduced by /tools/oss/latest.env_var.sh :)
-export PATH=$HOME/bin:$PATH
-
-#export PATH="/home/dikmeno/ActiveState/Komodo-IDE-7/bin:$PATH"
-export PATH="/home/dikmeno/ActiveState/Komodo-Edit-7/bin:$PATH"
-export PATH="/home/dikmeno/bin/eclipse:$PATH"                   # Feb 8, 2013: Until I test out eclim with eclipse (4.2), I need to use my own copy. Let Kavi know if we'd want eclim be part of the master eclipse installer (/opt/eclipse). Also, Veditor is another eclipse plugin, for verilog.
-#export PATH="/home-local/dikmeno/ActiveTcl-8.5/bin:$PATH"
-#export PATH="/home-local/dikmeno/TclDevKit-5.3/bin:$PATH"
-#export PATH="/home-local/dikmeno/SlickEdit/bin:$PATH"
-#export PATH="/home-local/dikmeno/git/bin:$PATH"
+alias history='history 50'
 
 # License Status
 alias lic_summit='lmutil lmstat -a -c 26318@rubicon'
@@ -115,11 +122,7 @@ alias lic_model2='lmutil lmstat -a -c 1650@lewis'
 alias lic_synop='lmutil lmstat -a -c 2589@rubicon'
 alias lic_ease='lmutil lmstat -a -c 1711@rubicon'
 
-alias ssh='/tools/oss/bin/sshpwd'
-alias chd='source ~/bin/chd'
-
 # ssh machines
-alias sshdik='ssh ger-dikmeno-linux-1'
 #alias ssh1500a='ssh fpga-1500-a-linux'
 #alias ssh2200a='ssh fpga-2200-a-linux'
 #alias ssh2800c='ssh fpga-2800-c-linux'
@@ -127,6 +130,7 @@ alias sshdik='ssh ger-dikmeno-linux-1'
 #alias ssh2800e='ssh fpga-2800-e-linux'
 alias ssh3000a='ssh fpga-3000-a-linux'
 #alias ssh3000b='ssh fpga-3000-b-linux' # used as montana-linux / idte since about 2011.
+
 alias ssh06a='ssh fpga-2006-a-linux'    #ssh3000c='ssh fpga-3000-c-linux'
 alias ssh07a='ssh fpga-2007-a-linux'    #ssh3000d='ssh fpga-3000-d-linux'
 alias ssh08a='ssh fpga-2008-a-linux'    #ssh3160a='ssh fpga-3160-a-linux'
@@ -137,24 +141,41 @@ alias ssh13a='ssh fpga-2013-a-linux'
 alias ssh13b='ssh fpga-2013-b-linux'
 alias ssh13c='ssh fpga-2013-c-linux'
 
-# Scripts (/tools/oss/bin/*) of value are: qbuild, qbash, qhelp.
-# Commands of value are qstat, qhost.
-alias submit='ssh fpga-01-centos5-5-linux'
-alias ssh01='ssh fpga-01-centos5-5-linux'
-#alias ssh02='ssh fpga-02-centos5-5-linux'
-#alias ssh03='ssh fpga-03-centos5-5-linux'
-#alias ssh04='ssh fpga-04-centos5-5-linux'
-#alias ssh05='ssh fpga-05-centos5-5-linux'
-#alias ssh06='ssh fpga-06-centos5-5-linux'
-#alias ssh07='ssh fpga-07-centos5-5-linux'
-#alias ssh08='ssh fpga-08-centos5-5-linux'
-#alias ssh09='ssh fpga-09-centos5-5-linux'
-#alias ssh20='ssh fpga-20-centos5-5-linux'
-#alias ssh21='ssh fpga-21-centos5-5-linux'
+alias ssh50='ssh fpga-50-redhat7-3-linux'
+alias ssh51='ssh fpga-51-redhat3-linux'
+alias ssh52='ssh fpga-52-redhat4-linux'
 
-alias fpga50='ssh fpga-50-redhat7-3-linux'
-alias fpga51='ssh fpga-51-redhat3-linux'
-alias fpga52='ssh fpga-52-redhat4-linux'
+alias sshdik='ssh ger-dikmeno-linux-1'
+
+alias gitg='ssh ger-toolmgr-linux-1 gitg'
+
+myCd() {
+    cd `pwd | sed -e "s/$1/$2/"`
+}
+alias chd=myCd
+
+# Try to preserve current path after ssh'ing to the new machine
+mySsh() {
+    local nwd
+    test -z "$2" && nwd=`pwd | sed -e 's/home-local/home/' | sed -e 's/\/net\/nfs\/atlantic//'` || nwd=$2
+    /usr/bin/ssh -X -t $1 "cd $nwd; /bin/bash"
+}
+alias ssh=mySsh
+
+umask 0022
+
+# My files in $HOME/bin are better than those introduced by /tools/oss/latest.env_var.sh :)
+export PATH=$HOME/bin:$PATH
+
+#export PATH="/home/dikmeno/ActiveState/Komodo-IDE-7/bin:$PATH"
+export PATH="/home/dikmeno/ActiveState/Komodo-Edit-7/bin:$PATH"
+export PATH="/home/dikmeno/bin/eclipse:$PATH"                   # Feb 8, 2013: Until I test out eclim with eclipse (4.2), I need to use my own copy. Let Kavi know if we'd want eclim be part of the master eclipse installer (/opt/eclipse). Also, Veditor is another eclipse plugin, for verilog.
+#export PATH="/home-local/dikmeno/ActiveTcl-8.5/bin:$PATH"
+#export PATH="/home-local/dikmeno/TclDevKit-5.3/bin:$PATH"
+#export PATH="/home-local/dikmeno/SlickEdit/bin:$PATH"
+#export PATH="/home-local/dikmeno/git/bin:$PATH"
+
+export EDITOR=vim
 
 #export PS1='[\[\e[1;31m\]\u\[\e[1;30m\]@\[\e[1;34m\]\h \W\[\e[1;30m\]\$\[\e[0m\]] '
 
@@ -162,74 +183,90 @@ alias fpga52='ssh fpga-52-redhat4-linux'
 # Fancy PWD display function
 ##################################################
 # The home directory (HOME) is replaced with a ~
-# The last pwdmaxlen characters of the PWD are displayed
+# The last pwdmaxlenS characters of the PWD are displayed
 # Leading partial directory names are striped off
 # /home/me/stuff          -> ~/stuff               if USER=me
-# /usr/share/big_dir_name -> ../share/big_dir_name if pwdmaxlen=20
+# /usr/share/big_dir_name -> ../share/big_dir_name if pwdmaxlenS=20
 ##################################################
 bash_prompt_command() {
     # How many characters of the $PWD should be kept
-    local pwdmaxlen=25
+    local pwdmaxlenS=25     # at the prompt
+    local pwdmaxlenT=85     # on the title bar
+
+    # prompt, i.e. Status line
     # Indicate that there has been dir truncation
     local trunc_symbol=".."
     local dir=${PWD##*/}
-    pwdmaxlen=$(( ( pwdmaxlen < ${#dir} ) ? ${#dir} : pwdmaxlen ))
-    NEW_PWD=${PWD/#$HOME/\~}
-    local pwdoffset=$(( ${#NEW_PWD} - pwdmaxlen ))
+    pwdmaxlenS=$(( ( pwdmaxlenS < ${#dir} ) ? ${#dir} : pwdmaxlenS ))
+    NEW_PWDS=${PWD/#$HOME/\~}
+    local pwdoffset=$(( ${#NEW_PWDS} - pwdmaxlenS ))
     if [ ${pwdoffset} -gt "0" ]
     then
-        NEW_PWD=${NEW_PWD:$pwdoffset:$pwdmaxlen}
-        NEW_PWD=${trunc_symbol}/${NEW_PWD#*/}
+        NEW_PWDS=${NEW_PWDS:$pwdoffset:$pwdmaxlenS}
+        NEW_PWDS=${trunc_symbol}/${NEW_PWDS#*/}
     fi
-    echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${NEW_PWD/#$HOME/~}\007"
 
-    # This will keep $VIEWROOT updated with the root path of the current Clearcase view
-    if [[ $PWD =~ myviews\/ ]]; then
-        if [[ $PWD =~ 2510_fpga\/soh ]]; then
-            VIEWROOT=`echo ${PWD} | sed -e 's/\(.*2510_fpga\/soh\).*/\1/'`
-        else
-            VIEWROOT=$PWD
-        fi
-        if [[ $PWD =~ myviews\/ ]]; then
-            VIEWBASE=`echo ${VIEWROOT} | sed -e 's/.*myviews//' -e 's/\/2510_fpga.*//'`
-            VIEWNAME=`basename $VIEWBASE`
-        else
-            VIEWBASE=""
-            VIEWNAME=""
-        fi
+    # Title bar
+    pwdmaxlenT=$(( ( pwdmaxlenT < ${#dir} ) ? ${#dir} : pwdmaxlenT ))
+    NEW_PWDT=${PWD/#$HOME/\~}
+    local pwdoffset=$(( ${#NEW_PWDT} - pwdmaxlenT ))
+    if [ ${pwdoffset} -gt "0" ]
+    then
+        NEW_PWDT=${NEW_PWDT:$pwdoffset:$pwdmaxlenT}
+        NEW_PWDT=${trunc_symbol}/${NEW_PWDT#*/}
+    fi
+
+    # Truncate HOSTNAME
+    if [[ $HOSTNAME =~ fpga-[0-9][0-9]- ]]; then
+        myhostnum=`hostname -s | /bin/sed -e 's/\(.*\)-linux.*/\1/'`
+    elif [[ $HOSTNAME =~ fpga ]]; then
+        myhostnum=`hostname -s | /bin/sed -e 's/fpga-\(.*\)-\(.\)-linux.*/\1/'`
+        myhostlet=`hostname -s | /bin/sed -e 's/fpga-\(.*\)-\(.\)-linux.*/\2/'`
+    else
+        myhostnum=`hostname -s | /bin/sed -e 's/\(.*\)-linux.*/\1/'`
+        myhostlet=""
+    fi
+    export myhostnum
+    export myhostlet
+
+    #echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${NEW_PWDS/#$HOME/~}\007"
+
+    # This will keep $LOCALBRANCH and $REMOTEBRANCH updated with the root path of the current git working copy
+    # Add a git-friendly prompt
+    local LOCALBRANCH=`git branch --no-color 2> /dev/null | /bin/sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+    local REMOTEBRANCH=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | /bin/sed -e 's/^origin\(.*\)/origin\1/'`
+
+    if `cd $PWD && [ -d .git ] || git rev-parse --git-dir >> /dev/null 2>&1`; then
+        VIEWROOT=`echo ${PWD} | /bin/sed -e "s/\(.*$LOCALBRANCH\).*/\1/"`
+        VIEWBASE=$VIEWROOT
+        VIEWNAME="$LOCALBRANCH <=> $REMOTEBRANCH"
     else
         VIEWROOT=$PWD
         VIEWBASE=""
         VIEWNAME=""
     fi
-    export VIEWROOT
     export VIEWBASE
     export VIEWNAME
-}
 
-# Add a git-friendly prompt
-function parse_git_branch_and_add_brackets {
-    # Return text such as '[faraday.dev]'  (without the single quotes) if current dir is within a valid git working-copy for (local) branch faraday.dev
-    #git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
-
-    # Return text such as '[faraday.dev <=> origin/mts-bert/faraday]'  (without the single quotes) if current dir is within a valid git working-copy
-    # for (local) branch faraday.dev that tracks remote branch mts-bert/faraday (assuming the project has branched at the remote)
-    # 'sed' for remote_branch adds the closing bracket, ], only if there is at least one character in the input
-    local_branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\ <=>\ /'`
-    remote_branch=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | sed -e 's/\(.\+\)/\1/'`
-    test -z "$local_branch" && suffix= || { test -z "$remote_branch" && suffix="NOT-SET" ; suffix="$suffix]" ; }
-    echo "$local_branch$remote_branch$suffix"
+    case $TERM in
+     xterm*|rxvt*|screen*)
+         printf "\033]0;%-80s %50s\007" "$USER@${myhostnum}${myhostlet}:${NEW_PWDT}" "<${VIEWNAME}>"
+          ;;
+     *)
+         printf ""
+          ;;
+    esac
 }
 
 bash_prompt() {
-    case $TERM in
-     xterm*|rxvt*|screen*)
-         local TITLEBAR='\[\033]0;\u@\h:${NEW_PWD}  <${VIEWNAME}>\007\]'
-          ;;
-     *)
-         local TITLEBAR=""
-          ;;
-    esac
+    #case $TERM in
+    # xterm*|rxvt*|screen*)
+    #     local TITLEBAR='\[\033]0;\u@\h:${NEW_PWDL}  <${VIEWNAME}>\007\]'
+    #      ;;
+    # *)
+    #     local TITLEBAR=""
+    #      ;;
+    #esac
     local NONE="\[\033[0m\]"    # unsets color to term's fg color
 
     # regular colors
@@ -276,38 +313,45 @@ bash_prompt() {
     [ $UID -eq "0" ] && UC=$EMR   # root's color
 
     # HISTTIMEFORMAT (history uses it) provides when the command execution started. The time on the prompt provides when it ended ==> Effectively, all commands are executed as if 'time ' is always used.
-    #PS1="[${UC}\u${EMK}@${EMB}\h \${NEW_PWD}${K}\${NONE}]$ "
-    PS1="$TITLEBAR${EMC}[${UC}\u${EMk}@${EMB}\h ${EMB}\${NEW_PWD}${EMC}]${EMg}\$(parse_git_branch_and_add_brackets) ${EMy}(\D{%F %T})${K}${NONE}\\$ "
-    # without colors: PS1="[\u@\h \${NEW_PWD}]\\$ "
+    #PS1="[${UC}\u${EMK}@${EMB}\h \${NEW_PWDS}${K}\${NONE}]$ "
+    PS1="${EMC}[${UC}\u${EMK}@${EMB}${myhostnum}${EMC}${myhostlet} ${EMB}\${NEW_PWDS}${EMC}]${K}${NONE} ${EMy}(\D{%F %T})${K}${NONE}\\$ "
+    # without colors: PS1="[\u@\h \${NEW_PWDS}]\\$ "
     # extra backslash in front of \$ to make bash colorize the prompt
 }
 
 PROMPT_COMMAND=bash_prompt_command
+bash_prompt_command
 bash_prompt
 unset bash_prompt
-
-
-# This will check if the $HOME/.pwdtemp file exists and will cd to the directory contained within
-# and then remove the file
-if [ -e $HOME/.pwdtemp ]; then
-    if [ -s $HOME/.pwdtemp ]; then
-        mypwd=`cat $HOME/.pwdtemp`
-        if [ -d $mypwd ]; then
-            cd $mypwd
-        else
-            echo "Warning:  $HOME/.pwdtemp existed, but it contained an invalid directory: $mypwd"
-        fi
-    else
-        echo "Warning:  $HOME/.pwdtemp existed, but it is empty"
-    fi
-    \rm -f $HOME/.pwdtemp
-fi
 
 #--------------------------------------------------------------------------------
 # This is required to change screen's socket directory from /tmp
 export SCREENDIR=$HOME/.screen/$HOSTNAME
 mkdir -p $SCREENDIR
 chmod 700 $SCREENDIR
+
+#--------------------------------------------------------------------------------
+# enable bash completion in interactive shells
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+#--------------------------------------------------------------------------------
+# Command line HISTORY
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# don't put duplicate lines in the history. See bash(1) for more options
+# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoreboth
+# ignore certain commands
+HISTIGNORE=fortune:exit:clear:pwd:ls
+# Timestamp the command execution start time
+export HISTTIMEFORMAT="%Y%m%d %H:%M:%S "
+# append to the history file, don't overwrite it
+shopt -s histappend
+export HISTSIZE=1000000
+export HISTFILESIZE=1000000000
 
 #--------------------------------------------------------------------------------
 # Echo an easy to copy line for setting the current display (mainly for updating existing screens)
@@ -340,40 +384,8 @@ fi
 #fi
 
 #--------------------------------------------------------------------------------
-# enable bash completion in interactive shells
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-
-#--------------------------------------------------------------------------------
-# Command line HISTORY
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-# don't put duplicate lines in the history. See bash(1) for more options
-# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-# ... or force ignoredups and ignorespace
-HISTCONTROL=ignoreboth
-# ignore certain commands
-HISTIGNORE=fortune:exit:clear:pwd:ls
-# Timestamp the command execution start time
-export HISTTIMEFORMAT="%Y%m%d %H:%M:%S "
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-#--------------------------------------------------------------------------------
 # Bash cd history
 source $HOME/bin/acd_func.sh
-
-#########################
-# Source global definitions
-#########################
-if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-fi
-alias ll='ls -l --color'    # FPGA compiler machines is overriding this alias. So, override theirs :)
-
-umask 0022
-export EDITOR=vim
 
 # Following command makes sure that xterm reads its parameters from .Xresources at its launch time.
 # If .Xresources is modified, following commands needs to be re-run and then xterm needs to be re-started before the changes to take affect.
