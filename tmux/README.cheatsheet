@@ -1,9 +1,15 @@
+##
+TODO:
+- Read http://unix.stackexchange.com/questions/26548/write-all-tmux-scrollback-to-a-file
+  It is about yanking text spanning more rows than what you see on a tmux window.
+  Provide the info back here.
+
 #########################################################################################
 # Provide most commonly used shortcuts and how .tmux.conf is used to change things (Ctrl+w, etc.)
 #   http://tmux.sourceforge.net/
 
 Each tmux session is a single 'tmux' process.
-You can have as many 'tmux' process as you want running on the same host.
+You can have as many 'tmux' processes as you want running on the same host.
 Within each tmux session, you can have as many tmux windows as you want.
 
 .tmux.conf              # Configuration file, including for key bindings, of tmux.
@@ -19,6 +25,7 @@ Ctrl+w :                # Start typing a tmux command such as
                         # - 'split-window -v'      to vertically split the current window
                         # - 'move-window -t 12'    to move the current window to number 12
                         # - 'move-window -t right' to move the current window to the tmux session, named 'right' (assuming 2 tmux sessions are running on the same machine, and the other one is named 'right')
+                        # - 'source ~/.tmux.conf'  to update current tmux session based on the specified tmux conf file. In this case, it will have the end result of as if a brand new tmux session is started.
 
 Ctrl+w c                # Create a new window in the current tmux session.
 Ctrl+w d                # Detach current tmux session.
@@ -45,14 +52,14 @@ Shift+MouseL <select>   # Copy the selecting into X's copy buffer so you can pas
 Shift+MouseM            # Paste what is in the X's copy buffer so you can get stuff from other applications' window into a window in tmux session.
 
 tmux ls                 # List all tmux session names and their status (attached, detached, etc.)
+tmux attach             # Same as 'tmux a'
 tmux a                  # Attach to the last detached tmux session. Last means the last time you detached from, not the last on in the list of tmux sessions.
 tmux a -t n             # Attach to tmux session number n  (They are numbered 0, 1, etc. List them to see)
                         # You can attach to an already attached tmux session on a different terminal.
                         # If so, all running attachments see what is typed and printed to screen.
                         # Likewise, if a window within the tmux session is changed, all attached sessions repeat the action.
-tmux attach             # Full form of 'tmux a'.
 
-export TERM=xterm       # tmux by default sets TERM to 'screen', and that breaks mouse scrolling and left clicking funcitonality in vim running on console.
+export TERM=xterm       # tmux by default sets TERM to 'screen', and that breaks mouse scrolling and left clicking functionality in vim running on console.
                         # Setting TERM to xterm, complemented by the setup in .vimrc to enable mouse scrolling/left-clicking, fixes the issue with vim running on consoles within tmux.
 
 #########################################################################################
