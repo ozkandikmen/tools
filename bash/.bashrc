@@ -96,6 +96,9 @@ alias qstat='qstat -u "*"'
 # Display tree style process map, i.e. parent-child relations are displayed graphically
 alias pstree='pstree -Gpl'
 
+# Display start time of the specified PID: psst $PID
+alias psst='ps ho lstart'
+
 # Make grep highlight the matches in its output
 alias grep="grep --color"
 
