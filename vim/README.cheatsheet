@@ -1,17 +1,7 @@
 TODO:
 ----
-Is it possible to create a horizontal scroll bar in vim as well as gvim?
-
 Monitor development on neovim @ neovim.org (crowdsourced vim revamp so modern GUI and extensible plugins can be written for it)
 It started around April, 2014.
-
-Install one of the following status bar managers:
-    vim-airline         https://github.com/bling/vim-airline        (Very light & fast. 100% vimscript)
-    vim-powerline       https://github.com/Lokaltog/vim-powerline   (Deprecated in favor of 'powerline')
-    powerline           https://github.com/Lokaltog/powerline
-                        Written in python at the core and exposes various bindings such that it
-                        can style status lines not only in vim, but also tmux, bash, zsh, and others.
-Should probably install 'powerline'.
 
 Change word boundary: _ should be considered as part of a word.
                       -, in certain file types, should also be considered as part of a word
@@ -97,6 +87,12 @@ gf          " Open the path/file that is under the cursor (assuming it is a vali
 
 an          " My shortcut (see .vimrc) for ':bn', which shows the file in the "next" buffer (n is for next)
 ap          " My shortcut (see .vimrc) for ':bp', which shows the file in the "prev" buffer (p is for previous)
+
+dt x        " Normal mode: Delete starting from under cursor UNTIL the first occurrence of character 'x' on the same line.
+            " Delete nothing if there is no 'x' on that line.
+df x        " Normal mode: Same as 'dt x' except that the character 'x' itself is also deleted.
+d5t x       " Same as typing 'dt x' repetitively for 5 times.
+d6f x       " Same as typing 'df x' repetitively for 6 times.
 
 ====================================================================================================
 In order to view files in a nice fixed size font, take these steps:
