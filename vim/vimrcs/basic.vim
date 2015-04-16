@@ -25,11 +25,11 @@
 " Sections:
 "    -> General
 "    -> VIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
+"    -> Fonts, menu
+"    -> Swaps, backups and undo
+"    -> Tab insertion and indent related
 "    -> Visual mode related
-"    -> Moving around, tabs and buffers
+"    -> Moving around, tabs, windows and buffers
 "    -> Status line
 "    -> Editing mappings
 "    -> vimgrep searching and cope displaying
@@ -195,6 +195,9 @@ if has("gui_running")
     nnoremap <C-F1> :if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
     nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
     nnoremap <C-F3> :if &go=~#'r'<Bar>set go-=r<Bar>else<Bar>set go+=r<Bar>endif<CR>
+
+    " Bring up horizontal scroll bar if line wrap is disabled, or hide it if line wrap is enabled
+    nnoremap <silent><expr> <f2> ':set wrap! go'.'-+'[&wrap]."=b\r"
 else
     if has("mac") || has("macunix")
         set guifont=Menlo:h14
