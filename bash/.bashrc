@@ -147,7 +147,7 @@ alias ssh52='ssh fpga-52-redhat4-linux'
 
 alias sshdik='ssh ger-dikmeno-linux-1'
 
-alias gitg='ssh ger-toolmgr-linux-1 gitg'
+alias sshgitg='ssh ger-toolmgr-linux-1'
 
 myCd() {
     cd `pwd | sed -e "s/$1/$2/"`
