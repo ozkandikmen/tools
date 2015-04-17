@@ -198,6 +198,12 @@ if has("gui_running")
 
     " Bring up horizontal scroll bar if line wrap is disabled, or hide it if line wrap is enabled
     nnoremap <silent><expr> <f2> ':set wrap! go'.'-+'[&wrap]."=b\r"
+
+    " Horizontal scroll bindings (Alt-l|h: 1 column at a time;  Alt-L|H: min(80,column-length-of-line) column at a time)
+    map <M-l> zl
+    map <M-L> zL
+    map <M-h> zh
+    map <M-H> zH
 else
     if has("mac") || has("macunix")
         set guifont=Menlo:h14
