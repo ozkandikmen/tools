@@ -30,7 +30,7 @@ HEAD~1                          # The commit object that is the first  (because 
 HEAD~2                          # The commit object that is the second (because of '2') ancestor of HEAD, following only the first parents (if encountered objects have 2 or more parents)
 HEAD^!   <=> HEAD^..HEAD        # in the context of diff.
          <=> HEAD^  HEAD        # same as above.
-<rev>^!  <=> <rev> ^<revp1> 
+<rev>^!  <=> <rev> ^<revp1>
                    ^<revp2>
                     .           # in the context of rev-parse.  All commit objects reachable by <rev> but not reachable by <revp1>, <revp2>, etc. where revp1/2/.. are (immediate) parents of <rev> (More than one if <rev> is a 'merge' object).
 HEAD^...HEAD                    # Some git commands work in one chronological path. Triple period allows any order here.
@@ -38,7 +38,7 @@ Any valid SHA value can be used in place of 'HEAD' in the lines above.
 So, in summary:
    ^<n> format allows you to select the nth parent of the commit (relevant in merges).
    ~<n> format allows you to select the nth ancestor commit, always following the first parent.
-Note:  HEAD^^ is the same as HEAD~2, however, HEAD^2 is NOT the same as HEAD~2. 
+Note:  HEAD^^ is the same as HEAD~2, however, HEAD^2 is NOT the same as HEAD~2.
 
 # --first-parent:
                                 # Strictly speaking, one way to visualize it is by analyzing the output of 'git cat-file -p <commitSHA>'.
@@ -77,22 +77,50 @@ git show --name-only 15cd8      # Display path/file names involved in the commit
 
 # Cherry-pick: When cherry-pick is executed by person 1, author of the original commit object (person 2) is
 # transferred over to the new commit object, and person 1 appears as committer of the new commit object.
-git cherry-pick -n 15dc8        # -n: Do not auto commit after (if) cherry-pick succeeds
+git cherry-pick -n 15dc8        # -n: Do not auto commit after (if) cherry-pick succeeds. You can not have any modification in your clone (working copy) when you run this command.
 
 # revert
 git revert -n 15dc8             # -n: Do not auto commit after (if) revert succeeds
 
 # reset
-....                            # TODO: Provide common uses of this command
+git reset --hard HEAD^          # Throw away the commit pointed by HEAD (along with local mods if any, but untracked files remain) and switch to (first) parent of HEAD
+git reset --soft HEAD^          # Switch to (first) parent of HEAD, and turn all mods in the original HEAD into staged modification state
 
 # checkout
-git checkout -- # TODO: Provide branch changing example
+git checkout -- path/file       # Throw away unstaged changes to path/file
+git checkout -b mylocal         # Can only be executed if there are no modifications in the current clone (working copy).
+                                # This command creates local branch 'mylocal', and switches to that branch.
+                                # This is purely a local branch, and not tracking any remote branch. Run 'git branch -vv' to see all your branches.
+                                # The local commit objects prior to the switch remain in your clone, and continue pointed to be by the original branch (tag).
+git checkout -b mylocal --track remotes/origin/mts-bert/saunders    # Create local branch 'mylocal', and set it up to track the remote branch 'mts-bert/saunders' in the remote 'origin'
+                                                                    # This command is transactionally equivalent to
+                                                                    #       git branch --track mylocal remotes/origin/mts-bert/saunders
+                                                                    #       git checkout mylocal
 
 # branch
-git branch -D branchname        # Delete local branch 'branchname'
-....                            # TODO: Provide remote branch delete command here
+git branch -d branchname        # Delete local branch 'branchname'. If it points at a commit that is not pointed by other branch tags or merged to elsewhere pointed by other branch tags, this will fail. Then, use '-D'.
+git push origin --delete remotes/oring/mts-bert/saunders    # Delete the remote branch mts-bert/saunders in the remote 'origin'.
 
 # rebase
 git rebase -i                   # Ex: If your cwd is a wcp with local commit(s), this commit will interactively allow you to reorder, merge, amend (i.e. split) them and/or change commit comments.
 
 # tag
+git tag -m "comment" mytag      # Create and apply annotated tag onto the commit object pointed by the current clone (working copy)
+git push origin mytag           # Push the tag to the remote, pointed by 'origin'
+
+# remote
+git remote -v                   # Display the remote(s) that your clone is related to (or none, if one is not set up)
+
+# pull                          # Adjust .git/config to have
+                                #       [pull]
+                                #               rebase = true
+                                # Then, all pull's will be implemented as rebase operation.
+git pull                        # Transactional equivalent of
+                                #       git fetch
+                                #       git merge | git rebase, depending on if 'rebase = true' is missing or not in .git/config.
+
+# push                          # Adjust .git/config to have
+                                #       [push]
+                                #               default = upstream
+                                # The config above makes push without args work, i.e. 'git push'. It replaces the older 'tracking'.
+                                # The 'upstream' also allows only one (local) branch (the one your wcp is on) to be pushed, not the other (local) branches in your (local) repo.
