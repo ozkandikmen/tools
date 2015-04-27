@@ -1,3 +1,4 @@
-After creating a brand new working copy, i.e. cloning this repo, run the following
-to complete vim setup:
+After creating a brand new working copy, i.e. cloning this repo and initializing the necessary
+submodules (git) as instructed in ../modules.readme, run the following to complete vim setup:
     ln -s ~/<repo>/vim/vimrcs/vimrc ~/.vimrc
+There is no need for .gvimrc anymore. It's built-in to .vimrc.

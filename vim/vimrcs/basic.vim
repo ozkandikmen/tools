@@ -75,7 +75,7 @@ nmap <leader>w :w!<cr>
 " Turn on the WiLd menu
 set wildmenu
 
-" Make tab completion more sane (similar to bash)
+" Make tab completion more sane (similar to bash). Useful when doing things like ':e ...' to open new files.
 set wildmode=longest:full,full
 
 " Ignore compiled files

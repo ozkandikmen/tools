@@ -82,6 +82,7 @@ Ctrl+w o    " Close all the 'window's (if split) other than where the cursor is
 g Ctrl+G    " Provides various statistics about the line & character under the cursor: Character position, total
             " character count (of the line and file), etc.
 
+:e <file>   " Open the named file. You can use 'TAB' / 'S-TAB' to cycle through files in the directory similar to bash does - thanks to 'wildmenu' setup.
 gf          " Open the path/file that is under the cursor (assuming it is a valid path/name).
             " Did not test this on path/file containing space in it - probably don't care, though :)
 
