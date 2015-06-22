@@ -1,0 +1,12 @@
+Equivalent of symlink in Google Drive:
+    How to make a file or dir appear within more than one directory?
+    Select the file or dir that you want appear in multiple locations.
+    Hit 'Shift-Z'. A pop-up should come up (for 'Add') where you can select the dir in which you want your file or dir to ALSO appear within.
+    Select one of the entries (double click onto any of them to browse within the selection).
+    Once you reach your dest dir, hit Add or Enter.
+
+    How to remove such a "link"?
+    Do NOT just right click on the file and select 'Remove'. Doing so will remove the file from all the locations that it is accessed.
+    Instead, select the "link" that you want to remove. Then see its 'View details' (click on the icon 'i' on top right or right click on the file and select 'View details'.)
+    A window should come up on the right side. Click on 'Details' and you should see all Location's that the selected file or dir appears within.
+    Click on the cross that you want to remove access to the selected file/dir from within.
