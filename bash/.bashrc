@@ -9,12 +9,7 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-# Choose which simulator to use
-# Each simulator brings its own gcc, i.e. sets the path up to use their own gcc,
-# which creates problems when compiling C files using standard gcc.
-#sim=modelsim
-#sim=riviera
-sim=none
+# Remember, each simulator brings its own gcc, however, use of 'Environment Modules' (via tools/oss) will make it a no problem.
 
 # QT Designer is a nice GUI for quickly generating GUI that could be copy/pasted
 # to power point slides. It can also be used to generate C or TCL/TK source code
@@ -24,45 +19,22 @@ sim=none
 # qt can't be used, but xilinx tools can be.
 qt_designer=no
 
-    # Clearcase
-    alias source_clearcase='source /tools/rational/clearcase/latest.env_var.sh'
-
     # Open source tools (Cloud/grid, Jedit, git, svn, meld, tig, etc.)
     alias source_oss='source /tools/oss/latest.env_var.sh'
 
-    # Code Review tools
+    # Code Review tools (Prefer Atlassian tools:  Crucible (Code Review), well integrated with JIRA (issue mgmt) and FishEye (repo mgmt))
     alias source_codereview='source /tools/smartbear/peerreview/latest.env_var.sh'
 
-    # Modelsim (Due to name mismatch (vsim), use either aldec or mentor at a time)
-    alias source_modelsim='if [ "$sim" == "modelsim" ]; then source /tools/mentor/modelsim/SE/latest.env_var.sh ; fi'
-
-    # Aldec Riviera (Due to name mismatch (vsim), use either aldec or mentor at a time)
-    alias source_riviera='if [ "$sim" == "riviera" ]; then source /tools/aldec/riviera/latest.env_var.sh ; fi'
-
-    # Visual Elite (now Mentor)
-    #alias source_visualelite='source /tools/summit/visual_elite/latest.env_var.sh'
-
-    # Synplify
-    alias source_synplify='source /tools/synplicity/synplify/latest.env_var.sh'
-
-    # Quartus
-    alias source_quartus='source /tools/altera/quartus/latest.env_var.sh'
-
-    # ISE (foundation)
-    #alias source_ise='if [ "$sim" != "riviera" -a $qt_designer == "no" ]; then source /tools/xilinx/ISE/foundation/latest.env_var.sh ; fi'
-
 # gtkterm - Hyperterminal equivalent for linux
-alias sourcetools='source_clearcase;source_codereview;source_synplify;source_quartus;source_oss'
+alias sourcetools='source_oss;source_codereview'
 
 host=`hostname -s`
 
-if [ `echo $host | grep "dikmeno-linux" | wc -l` == 1 ]; then
-    echo "Appears we are on a SW client, $host, so setting up env for SW dev (git, etc.)"
-    export KS_DISCIPLINE=sw
+if [ `echo $host | grep "odikmen-" | wc -l` == 1 ]; then
+    echo "Appears we are on a this user's client, $host, so setting up 'Environment Modules' package to be able to load/unload FPGA dev tools on demand"
     sourcetools;
 elif [ `echo $host | grep "\-linux" | wc -l` == 1 ]; then
-    echo "Appears we are on an FPGA client, $host, so setting up env for FPGA dev (git, EDA tools, etc.)"
-    sourcetools;
+    echo "Appears we are not on this user's client, $host, so skipping the set up of 'Environment Modules' package"
 fi
 
 
@@ -107,50 +79,24 @@ alias tree="tree -afCA"
 
 alias history='history 50'
 
+# PDF editor
+alias pdfe='master-pdf-editor'
+
+# Ignore all the untrusted user and Gtk related problems
+alias thgnull='thg 2>/dev/null'
+
+# Graphical disk usage tool (alternative to du)
+alias gdu='baobab 2>/dev/null'
+
 # License Status
-alias lic_summit='lmutil lmstat -a -c 26318@rubicon'
-alias lic_lattice='lmutil lmstat -a -c 1701@rubicon'
-alias lic_orcad='lmutil lmstat -a -c 1700@10.10.53.36'
-alias lic_mcad='lmutil lmstat -a -c 27000@10.10.53.36'
-alias lic_aldec='lmutil lmstat -a -c 28000@rubicon'
-#alias lic_aldec2='lmutil lmstat -a -c 27000@10.1.208.11'
-alias lic_cdn1='lmutil lmstat -a -c 5280@lewis'
-alias lic_cdn2='lmutil lmstat -a -c 5280@bradbury'
-alias lic_synp1='lmutil lmstat -a -c 1709@lewis'
-alias lic_synp2='lmutil lmstat -a -c 1709@rubicon'
-alias lic_altr='lmutil lmstat -a -c 1800@rubicon'
-alias lic_xlnx='lmutil lmstat -a -c 2100@rubicon'
-alias lic_model1='lmutil lmstat -a -c 1650@rubicon'
-alias lic_model2='lmutil lmstat -a -c 1650@lewis'
-alias lic_synop='lmutil lmstat -a -c 2589@rubicon'
-alias lic_ease='lmutil lmstat -a -c 1711@rubicon'
+lic_server='lab-66034'
+alias lic_aldec='lmutil lmstat -a -c 27009@$lic_server'
+alias lic_altera='lmutil lmstat -a -c 1802@$lic_server'
 
 # ssh machines
-#alias ssh1500a='ssh fpga-1500-a-linux'
-#alias ssh2200a='ssh fpga-2200-a-linux'
-#alias ssh2800c='ssh fpga-2800-c-linux'
-#alias ssh2800d='ssh fpga-2800-d-linux'
-#alias ssh2800e='ssh fpga-2800-e-linux'
-alias ssh3000a='ssh fpga-3000-a-linux'
-#alias ssh3000b='ssh fpga-3000-b-linux' # used as montana-linux / idte since about 2011.
-
-alias ssh06a='ssh fpga-2006-a-linux'    #ssh3000c='ssh fpga-3000-c-linux'
-alias ssh07a='ssh fpga-2007-a-linux'    #ssh3000d='ssh fpga-3000-d-linux'
-alias ssh08a='ssh fpga-2008-a-linux'    #ssh3160a='ssh fpga-3160-a-linux'
-alias ssh10a='ssh fpga-2010-a-linux'    #ssh3330a='ssh fpga-3330-a-linux'
-alias ssh11a='ssh fpga-2011-a-linux'    #ssh3460a='ssh fpga-3460-a-linux'
-alias ssh12a='ssh fpga-2012-a-linux'
-alias ssh13a='ssh fpga-2013-a-linux'
-alias ssh13b='ssh fpga-2013-b-linux'
-alias ssh13c='ssh fpga-2013-c-linux'
-
-alias ssh50='ssh fpga-50-redhat7-3-linux'
-alias ssh51='ssh fpga-51-redhat3-linux'
-alias ssh52='ssh fpga-52-redhat4-linux'
-
-alias sshdik='ssh ger-dikmeno-linux-1'
-
-alias sshgitg='ssh ger-toolmgr-linux-1'
+alias sshdik='ssh odikmen-64008'
+alias sshbw='ssh pinnacle-lab-ch-02'    # The rack-mount PC containing the Bittware board for experimentation
+alias sshlic='ssh $lic_server'          # License Server
 
 myCd() {
     cd `pwd | sed -e "s/$1/$2/"`
@@ -168,15 +114,10 @@ alias ssh=mySsh
 umask 0022
 
 # My files in $HOME/bin are better than those introduced by /tools/oss/latest.env_var.sh :)
-export PATH=$HOME/bin:$PATH
+PATH=$HOME/bin:$PATH
 
-#export PATH="/home/dikmeno/ActiveState/Komodo-IDE-7/bin:$PATH"
-export PATH="/home/dikmeno/ActiveState/Komodo-Edit-7/bin:$PATH"
-export PATH="/home/dikmeno/bin/eclipse:$PATH"                   # Feb 8, 2013: Until I test out eclim with eclipse (4.2), I need to use my own copy. Let Kavi know if we'd want eclim be part of the master eclipse installer (/opt/eclipse). Also, Veditor is another eclipse plugin, for verilog.
-#export PATH="/home-local/dikmeno/ActiveTcl-8.5/bin:$PATH"
-#export PATH="/home-local/dikmeno/TclDevKit-5.3/bin:$PATH"
-#export PATH="/home-local/dikmeno/SlickEdit/bin:$PATH"
-#export PATH="/home-local/dikmeno/git/bin:$PATH"
+# Clean up duplicates from PATH
+export PATH=$(echo "$PATH" | awk -v RS=':' -v ORS=":" '!a[$1]++')
 
 export EDITOR=vim
 
@@ -234,15 +175,21 @@ bash_prompt_command() {
 
     #echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${NEW_PWDS/#$HOME/~}\007"
 
-    # This will keep $LOCALBRANCH and $REMOTEBRANCH updated with the root path of the current git working copy
+    # This will keep $LOCALBRANCHGIT and $REMOTEBRANCHGIT updated with the root path of the current git working copy
     # Add a git-friendly prompt
-    local LOCALBRANCH=`git branch --no-color 2> /dev/null | /bin/sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-    local REMOTEBRANCH=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | /bin/sed -e 's/^origin\(.*\)/origin\1/'`
+    local LOCALBRANCHHG=`hg branch 2> /dev/null`
+    local REMOTEBRANCHHG=""
+    local LOCALBRANCHGIT=`git branch --no-color 2> /dev/null | /bin/sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+    local REMOTEBRANCHGIT=`git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null | /bin/sed -e 's/^origin\(.*\)/origin\1/'`
 
-    if `cd $PWD && [ -d .git ] || git rev-parse --git-dir >> /dev/null 2>&1`; then
-        VIEWROOT=`echo ${PWD} | /bin/sed -e "s/\(.*$LOCALBRANCH\).*/\1/"`
+    if `cd $PWD && [ -d .hg ] || hg identify >> /dev/null 2>&1`; then
+        VIEWROOT=$PWD
         VIEWBASE=$VIEWROOT
-        VIEWNAME="$LOCALBRANCH <=> $REMOTEBRANCH"
+        VIEWNAME="$LOCALBRANCHHG <=> $REMOTEBRANCHHG"
+    elif `cd $PWD && [ -d .git ] || git rev-parse --git-dir >> /dev/null 2>&1`; then
+        VIEWROOT=`echo ${PWD} | /bin/sed -e "s/\(.*$LOCALBRANCHGIT\).*/\1/"`
+        VIEWBASE=$VIEWROOT
+        VIEWNAME="$LOCALBRANCHGIT <=> $REMOTEBRANCHGIT"
     else
         VIEWROOT=$PWD
         VIEWBASE=""
