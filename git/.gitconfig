@@ -1,0 +1,31 @@
+[user]
+    name = Ozkan Dikmen
+    email = odikmen@allstontrading.com
+[push]
+    #default = tracking  # Use this with git-cola 1.8.0 or earlier. Even though 1.8.0 is out in 2012-08-19, it does not support the new 'upstream' keyword.
+    default = upstream
+[merge]
+#    tool = mymeld
+    tool = kdiff3
+    conflictstyle = diff3
+#[mergetool "mymeld"]
+#    cmd = meld --diff $BASE $LOCAL --diff $BASE $REMOTE --diff $LOCAL $BASE $REMOTE $MERGED
+[alias]
+    # git lg1 / git lg2 / git lg / git graph
+    lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)-- %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+    lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)-- %an%C(reset)' --abbrev-commit
+    logst = log --stat
+    lg = !"git lg1"
+    graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %C(green)%d%C(reset) %s\" --all --date=iso
+    diffs = diff --staged
+    difff = diff --no-ext-diff
+[diff]
+    external = /home/odikmen/bin/git-meld
+[color]
+    ui = true
+[core]
+    editor = vim
+[log]
+    decorate = full
+[rebase]
+    pull = preserve

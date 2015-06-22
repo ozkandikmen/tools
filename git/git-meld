@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Make sure to keep this file executable, i.e. chmod +x
+# meld spews error messages even in normal mode and have to hide them for cleaner term.
+#   Sample error message: (meld:10563): GLib-GObject-CRITICAL **: g_object_set_qdata: assertion `G_IS_OBJECT (object)' failed
+#   This message appears twice, separated by blank line: A total of 4 lines on the terminal is wasted.
+if [ `which meld | wc -l` -eq 1 ]; then
+    meld $2 $5 2>/dev/null
+else
+    diff $2 $5
+fi

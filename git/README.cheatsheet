@@ -92,6 +92,10 @@ git checkout -b mylocal         # Can only be executed if there are no modificat
                                 # This command creates local branch 'mylocal', and switches to that branch.
                                 # This is purely a local branch, and not tracking any remote branch. Run 'git branch -vv' to see all your branches.
                                 # The local commit objects prior to the switch remain in your clone, and continue pointed to be by the original branch (tag).
+                                # If you want to now push that branch 'mylocal' to the remote, named origin, run this:
+                                #       git push -u origin mylocal
+                                # This will create a remote branch named 'mylocal', and the content of your local branch 'mylocal' will appear on the remote 'origin', branch mylocal.
+                                # The '-u' will set the upstream (tracking) reference so the argument-less git pull will know what remote branch to use.
 git checkout -b mylocal --track remotes/origin/mts-bert/saunders    # Create local branch 'mylocal', and set it up to track the remote branch 'mts-bert/saunders' in the remote 'origin'
                                                                     # This command is transactionally equivalent to
                                                                     #       git branch --track mylocal remotes/origin/mts-bert/saunders
