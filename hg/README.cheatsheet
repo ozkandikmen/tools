@@ -1,0 +1,205 @@
+# Hg latest is 3.4.0 as of May 15, 2015; provided by mercurial.selenic.com
+# hg --version
+# Overview: http://mercurial.selenic.com/wiki/UnderstandingMercurial
+#           http://mercurial.selenic.com/wiki/GitConcepts               Comparing Git to Hg
+# Hg book:              http://hgbook.red-bean.com      (similar to git-scm book)
+# Hg public repository: bitbucket                       (similar to github)
+# Hg uses a template system, i.e. various commands such as log, etc. can use template files to modify what it displays.
+# See http://hgbook.red-bean.com/read/customizing-the-output-of-mercurial.html for details.
+# Also see 'http://stackoverflow.com/questions/8643612/how-to-make-hg-log-verbose-show-files-on-multiple-lines'
+#
+# blob              file
+# tree              manifest
+# commit            changeset               As a commit is executed, new changesets are created. See this for technical details: http://mercurial.selenic.com/wiki/ChangeSet
+# (annot) tag       "Global" tag            "Global" tags are like annotated tags in Git, except that Hg does not have an "object" for a tag like Git does with the annotated tags.
+#                                           Hg creates or modifies <repo>/.hgtags as "global" tags are created. Do not manually edit the file except when resolving a conflict. The file only grows.
+#
+# commit id         changeset id            They are both computed/identified by a 40-hex digit SHA1, however hg calls them nodeid whereas git calls them SHA1.
+# n/a               revision number         An integer, unique per repo, starting at 0, and created strictly as a convenience identifier for a changeset. Their use makes sense within a single repo.
+#
+# Note: a changeset ID is a nodeid.  A nodeid is computed by the content of the file, and using some metadata of its parent object(s).
+# Note: manifests have nodeid as well, just like tree's has id (sha1).
+#
+# Revlog:           Internal data structure (http://mercurial.selenic.com/wiki/Revlog). Use 'hg debugindex .hg/store/data/...i' to read its content
+# Changelog:        Virtual file, that is constructed from Revlog on the fly
+#
+# Each changeset has 0, 1 or 2 parent changesets, i.e. a merge changeset cannot have more than 2 parent changesets.
+# A changeset includes the actual changes to the files and some meta info:
+# - nodeid of its manifest
+# - list of changed files
+# - committer, comments, date/time and timezone
+# - branch ("default", if omitted or not set)
+#
+# Head: A changeset with no child changeset. Hg supports multiple heads concurrently within a single repo.
+#       Heads are identified by either local revision number or global SHA1 (nodeid). Equivalent of this in git are (lightweight) branch tags, one for each 'branch'
+#       or using Git with detached heads instead of branch names. Hg does not have garbage collection - see hg help heads.
+#       Hg Work Model: Hg recommends creating branch names only for long lived branches like for releases, bugfix branches, etc.
+# Tip:  The most recently changed head (The head with the highest revision number). For instance, if you just committed, that changes the tip.
+#       Similarly, if you just pulled from another repo, your tip is now pointing at the tip of what came from that other repo.
+#       As you can see, multiple heads can exist in a repo (like pulling just did).
+#
+# Branch:               Set of all changesets with the same branch name.  http://mercurial.selenic.com/wiki/Branch
+# Branch Head:          A changeset in a branch that has no children in that branch (not necessarily the same as head!)
+# Active Branch Head:   A branch head that is also a head
+# Inactive Branch Head: A branch head that has a child not in the same branch
+# Closed Branch Head:   A branch head with a closed marker
+# Closed Branch:        A branch with only closed heads
+#
+# "Update" back to a changeset which already has a child (changeset), then changing and committing creates a new child changeset, thus starting a new branch. Branches can be "named".
+#
+# Named branch:         The concept exists only in Hg. http://mercurial.selenic.com/wiki/NamedBranches
+# Lightweight branch:   The concept exists only in Git - See 'head' above for more info.
+# Tracking branch:      This concept only exists in Git.
+#                       Hg pull: Bring in all remote heads into your local repo, and then decide whether to merge or not.
+#                       Hg push: All pushes that would create new heads (i.e. lightweight branches) stop with a warning, except if the user explicitly forces them.
+#
+# Stage/Index:          Gets exposed to user only in Git. Hg has something known as DirState, but it is not exposed to the user. Hg users can do selective commit. Hg can extended with MQ (Mercurial Queues) extension to expose the stage/index concept.
+# Bare repo:            'hg update null' will turn your working directory into nothing, i.e. thus your repo will become bare repo. Or, just run 'hg clone -U ...'.
+#
+# Hg terminology: working directory's *parent* is revision X, rather than saying the working directory is looking at revision X.
+#
+# .hgignore
+# .hg/hgrc              Similar to .git/config
+# .hg/store             Similar to .git/objects
+
+hg init                 # Initialize a directory as a valid hg repo
+hg clone http://... my  # Clone the repo provided by http://... and place it inside a directory, my (local repo)
+
+hg add
+hg commit -m "cmt"      # hg ci -m "cmt"
+
+hg status [dir]         # '?' untracked; '!' missing tracked files (happens if you do 'rm file1'); 'M' modified; etc. See 'hg help status' for full list.
+hg log                  # Will display branch name only if it is different from "default" (see below for more on branches)
+hg log -l n             # (--limit)   Report latest n changesets, starting at 'tip:0'. If you want log to start with where your current branch is, use '-f .' as an additional option, as you see next.
+hg log -f . -l 1        # (--follow)  Print the changeset that is the parent of your working directory.
+hg log -v               # (--verbose) Hg is template based. If your .hgrc includes a template file appropriately (see ./log.cmdline) for the _verbose, then this cmd will list all files involved in the changeset.
+hg log -G               # (--graph)   Nice graphical display on console where you can easily spot what changeset is a parent of what other changeset, i.e. spot the merge changesets right away
+hg log --style compact  # Different log output. Other styles exist such as changelog. See http://hgbook.red-bean.com/read/customizing-the-output-of-mercurial.html.
+hg status --change x    # List file names involved in changeset x (x could be revision number or changeset id), similar to hg log -v with a proper template file except that hg status does not need a template file.
+hg id[entify]           # Display a small amount of info that 'hg log -f . -l 1' (while at the root of the repo) would displays. If it ends with +, your working directory has uncommitted modifications.
+hg id[entify] -n        # Display revision number of my head
+-------------------------
+hg up | co | checkout   # Aliases for update
+hg update               # Update to the tip of the current branch
+hg update newfeature    # Switch your working directory to the branch 'newfeature' (or the tag named 'newfeature').
+                        # - If wd contains uncommitted changes, the update is aborted (unless -C/--clean is specified in which case uncommitted changes are discarded, and the update is performed)
+                        # - If wd is updated, untracked files remain!
+                        # If you really want to do the switch but not ready to commit your changes in the current branch yet, follow the instructions under 'Switch branches' below.
+hg update -r 500        # Switch current working directory to revision number 500. Run 'hg log -f . -l 1' (while at the root of the repo) to see that it happened.
+                        # - If 500 is not a descendant or ancestor of the working directory's (wd) parent, the update is aborted.
+                        #   Exception: If '-c/--check' is specified, the wd is checked for uncommitted changes; if none are found, the wd is updated to 500.
+hg update --clean .     # Discard all changes, and check out a clean copy of the working directory's parent, losing all changes.
+-------------------------
+hg revert -C file1      # (git checkout -- file1) Revert file1 to what it is in the parent of wd. -C is to mask creation of back up file (.orig extension).
+                        # If the parent of wd has two parents, i.e. you are doing a merge in your wd, and did not commit yet, then you use 'hg revert -r 500 file1' to revert file1 to how it appears in revision 500.
+hg revert -r 400 file1  # Revert file1 to how it appears in revision 400. After this, file1 may (or probably will) will appear as modified (hg status). This is one way to back out latest changes to file1.
+-------------------------
+hg strip --keep -r .    # (git reset --soft HEAD~1) Discard the last changeset, however, keep the changes to the files in the working directory.
+                        # This is useful to do after temorarily committing changes to be able to switch to another branch to do something, then come back and continue working where you left off.
+hg strip -r .           # (git reset --hard HEAD~1) Discard the last changeset, and the changes in the files involved in that changeset are discarded as well.
+                        # The stripped changes are actually kept as bundle in '.hg/strip-backup/<BUNDLE-file-name>. They can re-applied if you wish to via 'hg unbundle .hg/strip-backup/<BUNDLE-file-name>'
+                        # In order to use 'strip', you must enable the strip extension to be able to do this. Add the following to your ~/.hgrc:
+                        #       [extensions]
+                        #       strip =
+-------------------------
+hg rebase               # With 'RebaseExtension' - may be desired for a 'linear history'
+                        # TODO: Find a way to replay your changes on top of something else you may have pulled in (but not merged yet) so that a linear history is maintained!
+                        # An alternative could be the use of 'export' (create patch) and 'import' (apply patch), via temporary clone of your repo could be a way - quite tedious, though.
+-------------------------
+hg add                  # Adds all untracked files to an area, pending for a commit operation.
+hg commit -m "..."      # Commits all changes in your working directory.  It is not necessary to do 'hg add' before the commit although doing it is harmless but just pointless.
+hg ci                   # Alias for hg commit
+hg ci <file1>           # Commit file1
+hg ci --close-branch    # Mark the branch as closed. This is equivalent to saying head is closed.
+hg remove -A            # Record all files reported as missing (!) per hg status as if 'hg remove' was executed on them at the beginning
+hg rm                   # Alias for hg remove
+-------------------------
+hg diff                 # TODO: Build on this like in git case. Various examples, etc. See "hg status --change x" or "hg status -r x -r y" to get a list of modified files for a rev or between revs.
+-------------------------
+hg tag -r 3 v0.1        # Add tag 'v0.1' to revision 3.
+hg tags                 # See all tags
+-------------------------
+
+Revision Sets           # 'hg help revsets' or http://selenic.com/hg/help/revsets - Provides a functional language for slecting a set of revisions.  This is where x..y, x^n, x~n, etc. are described.
+
+hg head                 # == hg log -f . -l 1 (while at the root of the repo) - http://mercurial.selenic.com/wiki/Head
+hg heads                # List all open branch heads. Technically, if there is a head, there is a branch (most likely nameless but could be associated to a branch name as well).
+                        # Therefore, there can be multiple heads in your repo (http://mercurial.selenic.com/wiki/MultipleHeads). Those extra heads may come in through 'hg pull'.
+
+NO:  Inactive vs active # Classification of branches. Do NOT use this as Hg project is moving away from this notion, per an active Hg author, Martin Geisler (http://stackoverflow.com/questions/8735032/mercurial-keep-default-branch-active)
+                        #   hg branches --active    Show active branches
+                        # Per Hg help: A branch is considered active if it contains repo head(s).
+                        # TODO: How can heads on a branch disappear other than them (heads) being closed?
+                        #       If there is no way other than closing them (heads) to make heads disappear, wouldn't that be equivalent to saying 'inactive branch is equivalent to closed branch'?
+                        #       Well, not really - see definition of closed and inactive branch around line 45 above.
+YES: Open vs closed     # Classification of branches. Use this model per an active Hg author, Martin Geisler (http://stackoverflow.com/questions/8735032/mercurial-keep-default-branch-active)
+                        #       hg branches                                 Show open branches, i.e. list repo named branches
+                        #       hg branches --closed                        Show normal and closed branches  ('normal' is what hg help says. I suppose it means 'open')
+                        #
+                        # Workflow (Named Branches):
+                        #       hg branch feeature1   |  hg update feature1                                 Create branch feature1. If it pre-exists, this will fail (use 'hg update feature1' to switch to it).
+                        #           change code
+                        #           hg commit                                                               First commit. Until this, repo will not contain anything about branch feature1.
+                        #           change code
+                        #           hg commit
+                        #           .
+                        #           done with feature implementation and test
+                        #       hg commit --close-branch -m "passes all tests, ready for merging"           This marks the branch as closed, i.e. create one more changeset
+                        #       hg update default                                                           Switch to branch 'default'
+                        #       hg merge feature1                                                           Merge feature1 to the current branch (default)
+                        #       hg commit -m "Merge is committed"                                           This commit is on branch 'default'
+                        #       hg heads
+                        #           Only 1 head is displayed, the one for 'default', i.e. head of feature1 is not in the list
+                        #       hg branches
+                        #           default    45:...
+                        #           Only 1 branch is displayed, i.e. feature1 is not in the list
+                        #
+                        # Workflow (Pulling in other people's changes and continue working):
+                        #       hg incoming [http://example.net/repos/remote]                               Display what would be brought in from the specified address (or your default remote as specified in .hg/hgrc) into your repo, similar to what 'hg diff' would show prior to a commit
+                        #       hg pull [http://example.net/repos/remote]                                   Pull the new changes from the specified address (or your default remote as specified in .hg/hgrc) into your repo. Note that this does NOT change the working directory. It just brings in new head(s) into your repo.
+                        #       hg update feature1
+                        #       hg merge -p                                                                 Preview the changes that would be merged. No merge is performed.
+                        #       hg merge [-r REV]                                                           Works only if a) wd's parent is a head rev, b) branch 'feature1' contains exectly one other head.
+                        #                                                                                   Otherwise, must specify 'REV' from which the changes will be merged into the current branch head.
+                        #       hg resolve --list                                                           Display list of conflicts
+                        #       hg resolve file1                                                            Fix the conflict in file1 by hand
+                        #       hg resolve --mark file1                                                     Mark the resolution to file1
+                        #   THEN
+                        #       hg ci
+                        #   OR
+                        #       hg update --clean .                                                         Discard all changes, and check out a clean copy of the working directory's original parent, losing all the changes.
+                        #
+                        # Workflow (Switch branches)
+                        #       hg commit -m "on-going"                                                     Commit everything (will be restored when switching back to this branch)
+                        #       hg update feature2                                                          Switch to the other branch. Note that untracked files carried over.
+                        #       hg strip --keep -r .                                                        This is equivalent to 'git reset --soft HEAD~1'.
+                        #       do work
+                        #
+                        # Pruning (named)branch:
+                        #       Once you are done with working on a (named)branch, you can/should prune it.
+                        #       See http://mercurial.selenic.com/wiki/PruningDeadBranches. Number (1) is probably what you want, i.e. basically close the branch.
+                        #
+                        # Renaming branch:
+                        #       It's about creating a branch with the new name, and marking the old one closed. Here are the steps:
+                        #           hg update old
+                        #           hg branch new
+                        #           hg commit -m "Changing stiging branch to staging."
+                        #           hg update old
+                        #           hg commit --close-branch -m "This was a typo; use new instead."
+                        #           hg push --new-branch -b new
+                        #
+                        # NOTE: As discussed before, there can be multiple heads per branch. See above for hg pull (no merge, just bring new changes as another head, waiting to be merged), and the discussion about hg heads.
+                        #       When all heads on a branch are closed, the branch itself is closed and will disappear from the output of hg branches (as illustrated above)
+                        #       The head can only be closed only, i.e. by executing 'hg commit --close-branch ...'.
+hg branch               # Displays the branch you are on. Ex: default.   (While in a non-hg dir, typing 'hg init; hg branch' will display 'default'). Also see 'hg branches' above.
+hg branch my1           # Creates branch named 'my1' off the changeset you were on (which does not have to be the latest/tip on your branch),
+                        # and switches you to that branch. Subsequent commits will be associated with this new branch name.
+
+hg serve                    # Start a built-in web server on your working directory. Other people can now do 'hg incoming|pull http://<your ip>:8000' so see/pull in your changes.
+                            # Note that other people cannot push to you as that would be considered as a security hole. They can only pull from you.
+hg serve & Allow pushing    # Run this on a 'shared' area (e.g. /data/4/dfs/eda/fpga - good idea?), and add the following to .hg/hgrc to allow everyone to push to the repo
+                            #       [web]
+                            #           allow_push = *
+                            # Or, replace * with "virtual" users as defined using .htpasswd file
+hg outgoing /tools/fpga     # Display what would go out to the shared repo at /tools/fpga before you push your work to it.
+hg push /tools/fpga         # Push your changes to the repo at /tools/fpga

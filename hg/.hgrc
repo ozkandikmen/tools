@@ -1,0 +1,37 @@
+[ui]
+# name and email (local to this repository, optional)
+username = Ozkan Dikmen <odikmen@allstontrading.com>
+style = /home/odikmen/tools/hg/log-cmdline
+merge = kdiff3
+
+[tortoisehg]
+vdiff = kdiff3
+editor = gvim
+
+[alias]
+__mystatus = status
+st = !hg __mystatus $($HG root) $HG_ARGS
+
+# Enable extdiff extension package (http://mercurial.selenic.com/wiki/ExtdiffExtension) so we can install custom diff and merge commands for hg
+[extensions]
+hgext.extdiff =
+
+# Create a command (extdiff becomes possible after the extdiff extension package is enabled above)
+# With the line 'cmd.kdiff3', you can now do 'hg kdiff3 file1' to have kdiff3 GUI show the difference between what is in your working directory and its parent for file1.
+# With the line 'cmd.ediff', diffuse is invoked where you can do editing within its GUI (assuming the edited file is in working directory, not in some committed changeset).
+# With the line 'cmd.mdiff', meld    is invoked where you can do editing within its GUI (assuming the edited file is in working directory, not in some committed changeset).
+#                   Edit in GUI during diff              Support for merge              Dir Comparison
+# kdiff3                    No                        Yes, 3-way window, w/ edit            Yes
+# diffuse                   Yes                                 No                          No
+# meld                      Yes                          Yes, but never used                Yes
+[extdiff]
+cmd.kdiff3 =
+cmd.ediff = diffuse
+cmd.mdiff = meld
+
+[merge-tools]
+kdiff3.args = $base $local $other -o $output
+
+# Enable strip extension to be able to do equivalent of git reset functionality
+[extensions]
+strip =
