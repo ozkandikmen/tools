@@ -150,12 +150,12 @@ function! SetWindowName()
     let mypwd           =expand("%:{getcwd()}")
     let modified        ="%M"
     " TODO: Fix this substitution
-    let wcpname         =substitute(filepath, "\(mywcps\/\S*\)\/\.\*", "\1", 0)
-    let wcpname         =substitute(wcpname,  "\.\*\/", "", 0)
-    if wcpname == filename
+    let wdname          =substitute(filepath, "\(mywds\/\S*\)\/\.\*", "\1", 0)
+    let wdname          =substitute(wdname,  "\.\*\/", "", 0)
+    if wdname == filename
         let &titlestring    =modified . v:servername . " - " . filepath
     else
-        let &titlestring    =modified . v:servername . " - <" . wcpname . "> - " . filepath
+        let &titlestring    =modified . v:servername . " - <" . wdname . "> - " . filepath
     endif
 endfunction
 
