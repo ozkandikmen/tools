@@ -1,0 +1,4 @@
+cd $HOME
+ln -s <repo>/hg/.hgrc .
+
+The contents of .hgrc expects <repo> to be 'tools'.

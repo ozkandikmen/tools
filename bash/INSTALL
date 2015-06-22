@@ -1,0 +1,4 @@
+cd $HOME
+ln -s <repo>/bash/.bashrc .
+
+An example repo name is (<repo>) is 'tools'.

@@ -1,0 +1,4 @@
+cd $HOME
+ln -s <repo>/tmux/.tmux.conf .
+
+An example repo name is (<repo>) is 'tools'.

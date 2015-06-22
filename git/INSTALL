@@ -1,0 +1,7 @@
+cd $HOME
+ln -s <repo>/git/.gitconfig .
+mkdir bin && cd bin
+ln -s ../<repo>/git/git-meld .
+
+Update your $PATH to make "$HOME/bin" be in it.
+An example repo name is (<repo>) is 'tools'.

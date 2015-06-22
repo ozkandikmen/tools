@@ -1,0 +1,4 @@
+cd $HOME
+ln -s <repo>/X/.Xresources .
+
+An example repo name is (<repo>) is 'tools'.
