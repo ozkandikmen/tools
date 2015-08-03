@@ -2,3 +2,5 @@ cd $HOME
 ln -s <repo>/tmux/.tmux.conf .
 
 An example repo name is (<repo>) is 'tools'.
+The commands in the .tmux.conf may require a minimum tmux version.
+As of July, 2015, version 1.6 does not work, but 1.9a does.

@@ -20,6 +20,13 @@ If you make changes to the configuration file, and you want that to take affect 
 the currently running tmux session, run on any of its windows: 'tmux source-file <path/file>'.
 If the file is in your $HOME, remember to do ~/<filename>.
 
+Sharing your tmux session with other users is possible: http://readystate4.com/2011/01/02/sharing-remote-terminal-session-between-two-users-with-tmux/
+If security and trust is not a problem, simply do:
+    User1:  machine1> tmux -S /tmp/pair
+    User2:  machine1> tmux -S /tmp/pair attach
+Now users will have access to the same tmux session. They can create windows, type at the same time, etc.
+If a user detaches, and then later attaches back, he will see whatever the other has user has been doing without missing anything.
+
 Ctrl+w                  # Configured it to be the tmux cmd initiation key (I used to use Ctrl+a in 'screen') in the configuration file.
 Ctrl+w :                # Start typing a tmux command such as
                         # - 'split-window -v'      to vertically split the current window
