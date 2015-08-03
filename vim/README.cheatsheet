@@ -40,7 +40,8 @@ Investigate vim 'sessions' and write about it here.
 Ctrl+v activates visual column editing mode
 ,           " Currently set as the <leader>. Take a look at vimrc files for its use.
 
-viw         " Select word in visual mode starting where the cursor is until the word boundary is reached
+viw         " Select word in visual mode starting from the beginning of the word under the cursor (not necessarily
+            " right under the cursor) is until the word (end) boundary is reached
 
 :set nonu   " Disable line numbering so I can select text with l-mouse without line numbers :)
 
@@ -62,12 +63,17 @@ gqap        " Indent the paragraph where the cursor is at. Blank lines are the b
             " By default, 80 column is used.  To change it, :set textwidth=90
 
 .\{-}       " Non-greedy search, equivalent to '.*' in standard regexp.
+\(....\)    " Replace .... with your search pattern. This allows you to group search pattern
+            " By escaping the OR operator | as \|, you can search for one word or another
+            " Ex:   /\(reg\|wire\) [31
+            "     will search for reg or wire followed by a space and [31
 
 qa          " Start record macro 'a'. When done, hit q again to stop recording.
             " Macros can call/execute other macros.
 "ap         " Do this on a blank line. It pastes what was recorded in buffer 'a' (could be the macro just recorded).
             " You can now change it. Then, select it in visual mode: 0 v $ h
             " Now, copy it over the same buffer (a): "ay
+            " You just modified the macro that was at buffer 'a'.
 @a          " Execute macro 'a' once.
 10@a        " Execute macro 'a' 10 times.
 
