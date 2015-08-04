@@ -26,7 +26,7 @@
 "               /* my_favorite_module AUTO_TEMPLATE (
 "                .inp1 (my_name1),
 "                .inp2 (1'b0),
-"                .inp_data_\(.+\) (my_inp_dataname_\1[@"(- (* (+ 0 1) (string-to-number vl-width)) 1)":@"(* 0 (string-to-number vl-width))"])
+"                .inp_data_\(.+\) (my_inp_dataname_\1[@"(- (* (+ 3 1) (string-to-number vl-width)) 1)":@"(* 0 (string-to-number vl-width))"])
 "                );
 "                */
 "               my_favorite_module
@@ -39,6 +39,7 @@
 "                   .
 "                   .
 "               );
+"       Find elisp interpreter in vimscript, and use it to interpret the statement above.
 
 " TODO: Use /*AUTO_TEMPLATE .../*, specified for emacs verilog-mode, and provide proper instantiation
 "       of the referenced module. The addition to the existing functionality is to obviously parse
@@ -473,6 +474,7 @@ fun! <SID>Analysis_Module_Head(module_num, module_merged_list, module_name, para
         let pid = ''
         let p_dir = 'none'
         let pid_size = ''
+        let pid_type = ''
         let p_list = []
         let pi_list = []
         let po_list = []
@@ -497,19 +499,24 @@ fun! <SID>Analysis_Module_Head(module_num, module_merged_list, module_name, para
                 let pid_size = pid_size . substitute(module_head, '^\[.\{-}\]\zs.*$', '', '')
                 let module_head = substitute(module_head, '^\[.\{-}\]', '', '')
                 continue
+            elseif module_head =~ '^\(\<signed\>\)'                                "find port type
+                let pid_type = 'signed'
+                let module_head = substitute(module_head, '^\(\<signed\>\)\s*', '', '')
+                continue
             elseif module_head =~ '^[a-zA-Z_][a-zA-Z0-9_]*[,)]'                    "find port
                 let pid = substitute(module_head, '^[a-zA-Z_][a-zA-Z0-9_]*\zs[,)].*$', '', '')
                 let module_head = substitute(module_head, '^[a-zA-Z_][a-zA-Z0-9_]*', '', '')
                 let max_key_length_port = max([strwidth(pid), max_key_length_port])
-                call add(p_list, [pid, p_dir, pid_size])
+                call add(p_list, [pid, p_dir, pid_size, pid_type])
                 if p_dir == 'input'
-                    call add(pi_list, [pid, pid_size])
+                    call add(pi_list, [pid, pid_size, pid_type])
                 elseif p_dir == 'output'
-                    call add(po_list, [pid, pid_size])
+                    call add(po_list, [pid, pid_size, pid_type])
                 elseif p_dir == 'inout'
-                    call add(pio_list, [pid, pid_size])
+                    call add(pio_list, [pid, pid_size, pid_type])
                 endif
                 let pid_size = ''
+                let pid_type = ''
                 continue
             else
                 return 6        "Error 6: when analysising port
@@ -558,6 +565,7 @@ fun! <SID>Analysis_Module_Body(non_comment_lines, module_num, module_info_list, 
         let pid = ''
         let p_dir = 'none'
         let pid_size = ''
+        let pid_type = ''
         let p_list = []
         if a:vlog_95_flag[i] == 1   "need analysis
             let line_index = index(a:non_comment_lines, a:module_info_list[i][1])
@@ -587,14 +595,19 @@ fun! <SID>Analysis_Module_Body(non_comment_lines, module_num, module_info_list, 
                             let pid_size = pid_size . substitute(line_content, '^\[.\{-}\]\zs.*$', '', '')
                             let line_content = substitute(line_content, '^\[.\{-}\]', '', '')
                             continue
+                        elseif line_content =~ '^\(\<signed\>\)'
+                            let pid_type = 'signed'
+                            let line_content = substitute(line_content, '^\(\<signed\>\)\s*', '', '')
+                            continue
                         elseif line_content =~ '^[a-zA-Z_][a-zA-Z0-9_]*[,;]'
                             "get pid
                             let pid = substitute(line_content, '^[a-zA-Z_][a-zA-Z0-9_]*\zs[,;].*$', '', '')
                             "store pid
-                            call add(p_list, [pid, p_dir, pid_size])
+                            call add(p_list, [pid, p_dir, pid_size, pid_type])
                             "del this pid
                             let line_content = substitute(line_content, '^[a-zA-Z_][a-zA-Z0-9_]*\ze[,;]', '', '')
                             let pid_size = ''
+                            let pid_type = ''
                             continue
                         else
                             return 4        "Error 4: when processing port declare line.
@@ -733,7 +746,7 @@ fun! <SID>Inst_Module(module_num, module_name, para_list, port_list, max_key_len
             let inst = inst.a:module_name[i]."\n#(\n"
             let list_len = len(a:para_list[i])
             let list_index = 0
-            " TODO: Vertically align the text 'default value = ...' across all rows. Do it as a function, and replace the poor man's job in the case of port processing below
+            " TODO: Vertically align the text 'default value = ...' across all rows. Do it as a function, and replace the poor man's job in the case of port processing below. Also print port[3] before port[2], however, if port[3] is '' for all entries, do not push port[2] by 7 chars to the right unnecessarily (all 7 would be blank).
             while 1
                 let para = a:para_list[i][list_index]
                 let line_content = "    .".para[0]
@@ -775,11 +788,11 @@ fun! <SID>Inst_Module(module_num, module_name, para_list, port_list, max_key_len
                     let line_content = line_content." "
                 endw
                 if list_index == list_len-1     "the last item
-                    let line_content = line_content.")    // ".port[1]." ".port[2]."\n"
+                    let line_content = line_content.")    // ".port[1]." ".port[2]." ".port[3]."\n"
                     let inst = inst.line_content
                     break
                 else
-                    let line_content = line_content."),   // ".port[1]." ".port[2]."\n"
+                    let line_content = line_content."),   // ".port[1]." ".port[2]." ".port[3]."\n"
                     let inst = inst.line_content
                     let list_index = list_index+1
                     continue
